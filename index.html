@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F8F5F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151311" media="(prefers-color-scheme: dark)">
+<meta name="description" content="ECO WARM тоосгон халаагуур: өрөөнийхөө талбайг оруулаад тохирох загвар, нийт үнэ (НӨАТ-тэй), сарын цахилгааны төлбөрөө тооцоол.">
+<title>ECO WARM · Халаалтын тооцоолуур</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   Design tokens — one source for colour, type, radius, space
+   ========================================================= */
+:root{
+  /* neutrals */
+  --paper:#F8F5F0; --surface:#FFFFFF; --surface-2:#F9F7F3; --ink:#1B1714; --ink-2:#4A423B; --muted:#6E655D;
+  --line:#E9E2D8; --line-strong:#D6CCBF;
+  /* brand roles: green = information & brand, orange = actions only */
+  --green:#23843A; --green-ink:#1D6E30; --green-soft:#E6F3E8;
+  --action:#D2520E; --action-hover:#BC4709; --action-ink:#FFFFFF;
+  /* status */
+  --pos:#1D6E30; --pos-soft:#E6F3E8; --neg:#A8321E; --neg-soft:#F8E3DD; --amber:#7A5200; --amber-soft:#FBEFD2;
+  /* type scale (9 steps) */
+  --t-xs:13px; --t-sm:14px; --t-base:16px; --t-md:18px; --t-lg:22px; --t-xl:28px;
+  --t-h2:clamp(26px,5.6vw,36px); --t-h1:clamp(32px,8.6vw,50px); --t-num:clamp(34px,8vw,44px);
+  /* radius (4 steps) */
+  --r-sm:8px; --r-md:12px; --r-lg:20px; --r-pill:999px;
+  --shadow:0 1px 0 rgba(27,23,20,.04), 0 10px 28px -14px rgba(27,23,20,.18);
+  --display:"Unbounded", system-ui, sans-serif;
+  --body:"Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#151311; --surface:#1E1B18; --surface-2:#191714; --ink:#F2ECE4; --ink-2:#CFC6BB; --muted:#A39A90;
+    --line:#2E2A26; --line-strong:#423C36;
+    --green:#5DBE70; --green-ink:#7FD08F; --green-soft:#1B2E20;
+    --action:#E8692A; --action-hover:#F07A3D; --action-ink:#1A0E09;
+    --pos:#7FD08F; --pos-soft:#1B2E20; --neg:#F08A72; --neg-soft:#3A201A; --amber:#E8B85A; --amber-soft:#33281A;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 12px 30px -14px rgba(0,0,0,.6);
+  }
+}
+
+/* ---------- base ---------- */
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 var(--t-base)/1.55 var(--body);
+  font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:var(--r-sm)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+section[id]{scroll-margin-top:16px}
+
+/* headings: h1 > h2 (section) > card title > step title */
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+h1{font-size:var(--t-h1);line-height:1.08}
+h1 em{font-style:normal;color:var(--action)}
+.sec-title{font-size:var(--t-h2);line-height:1.12}
+.card-title{font-size:var(--t-lg);line-height:1.2}
+.step-title{font-size:var(--t-md);line-height:1.25;letter-spacing:-.01em}
+.lede{font-size:var(--t-md);line-height:1.55;color:var(--ink-2);margin:0;max-width:58ch}
+.meta{font-size:var(--t-xs);color:var(--muted);margin:0}
+.sub{font-size:var(--t-sm);color:var(--ink-2);margin:0}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:var(--r-md);
+  border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);font-size:var(--t-base);font-weight:600;text-decoration:none;
+  transition:background .15s,border-color .15s,transform .1s}
+.btn:hover{border-color:var(--ink-2)}
+.btn:active{transform:scale(.99)}
+.btn-action{background:var(--action);border-color:var(--action);color:var(--action-ink)}
+.btn-action:hover{background:var(--action-hover);border-color:var(--action-hover)}
+.btn-ink{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.btn-ink:hover{opacity:.9;border-color:var(--ink)}
+.btn-lg{min-height:56px;font-size:var(--t-md)}
+.btn-block{width:100%}
+.link-btn{border:0;background:none;padding:6px 0;font-size:var(--t-sm);font-weight:500;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.link-btn:hover{color:var(--ink)}
+
+.pill{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--r-pill);font-size:var(--t-xs);font-weight:600;white-space:nowrap;line-height:1.2}
+.pill-neutral{background:var(--line);color:var(--ink-2)}
+.pill-green{background:var(--green);color:#fff}
+.pill-amber{background:var(--amber-soft);color:var(--amber)}
+.pill-pos{background:var(--pos-soft);color:var(--pos)}
+.pill-neg{background:var(--neg-soft);color:var(--neg)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow)}
+
+/* ---------- header ---------- */
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:64px}
+.logo{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font:700 22px/1 var(--display);letter-spacing:-.045em}
+.logo .e{color:var(--green)} .logo .w{color:var(--action)}
+.top .btn{min-height:42px;padding:0 14px;font-size:var(--t-sm);border-color:var(--green);color:var(--green-ink)}
+.top .btn:hover{background:var(--green-soft)}
+
+/* ---------- hero ---------- */
+.hero{display:grid;gap:28px;padding:32px 0 36px}
+@media (min-width:960px){.hero{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);align-items:center;gap:56px;padding:56px 0 56px}}
+.eyebrow{display:block;font-size:var(--t-sm);font-weight:600;color:var(--green-ink);margin-bottom:14px}
+.hero h1{margin-bottom:16px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.hero-cta .btn{flex:1 1 auto}
+@media (min-width:520px){.hero-cta .btn{flex:0 0 auto}}
+.hero-img{margin:0;border-radius:var(--r-lg);overflow:hidden;aspect-ratio:16/9;box-shadow:var(--shadow);background:#EFE6DA}
+@media (min-width:960px){.hero-img{aspect-ratio:4/3}}
+/* keep both the heater and the brick in frame when the 16:9 photo is cropped to 4:3 */
+.hero-img img{width:100%;height:100%;object-fit:cover;object-position:64% 50%}
+
+/* ---------- features ---------- */
+.features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:var(--r-lg);overflow:hidden;margin:0 0 64px;padding:0;list-style:none}
+@media (min-width:760px){.features{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1080px){.features{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.feature{background:var(--surface);padding:14px 12px;display:flex;align-items:center;gap:10px}
+@media (min-width:1080px){.feature{flex-direction:column;align-items:flex-start;padding:18px 16px}}
+.feature .ic{flex:none}
+.feature .ic{width:40px;height:40px;border-radius:var(--r-md);display:grid;place-items:center;background:var(--green-soft);color:var(--green)}
+.feature b{display:block;font-size:var(--t-base);font-weight:600;line-height:1.3}
+.feature span{font-size:var(--t-sm);color:var(--ink-2);line-height:1.4}
+
+/* ---------- section header ---------- */
+.sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;max-width:720px}
+
+/* ---------- video guide ---------- */
+/* The clip is shot vertically (9:16), so the frame is portrait too: no black side bars. */
+.video{display:grid;gap:24px;padding:0 0 64px;align-items:center}
+@media (min-width:760px){.video{grid-template-columns:300px minmax(0,1fr);gap:48px}}
+@media (min-width:960px){.video{grid-template-columns:320px minmax(0,560px);gap:64px;justify-content:center}}
+.yt{position:relative;display:block;width:min(100%,340px);margin:0 auto;aspect-ratio:9/16;border-radius:var(--r-lg);overflow:hidden;background:#000;box-shadow:var(--shadow)}
+/* Phone: heading → video → steps, so the clip sits right under its title. */
+@media (max-width:759px){
+  .video{gap:0}
+  .video-text{display:contents}
+  .video .eyebrow,.video .sec-title,.video .lede{order:1}
+  .video .lede{margin-bottom:20px}
+  .video .yt{order:2;width:min(100%,300px)}
+  .video-steps,.video-text .meta{order:3}
+}
+.yt button{all:unset;position:absolute;inset:0;cursor:pointer;display:grid;place-items:center}
+.yt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .4s ease,filter .3s}
+.yt button::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.55))}
+.yt .play{position:relative;z-index:1;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:var(--action);color:#fff;
+  box-shadow:0 10px 30px -8px rgba(0,0,0,.55);transition:transform .2s ease,background .2s}
+.yt .cap{position:absolute;z-index:1;left:16px;right:16px;bottom:14px;color:#fff;font-size:var(--t-sm);font-weight:600;display:flex;align-items:center;gap:8px;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.yt button:hover img{transform:scale(1.03)}
+.yt button:hover .play{transform:scale(1.06);background:var(--action-hover)}
+.yt button:focus-visible{outline:3px solid var(--action);outline-offset:-3px;border-radius:var(--r-lg)}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video-text .sec-title{margin-bottom:12px}
+.video-steps{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:12px}
+.video-steps li{display:flex;gap:12px;align-items:flex-start;color:var(--ink-2)}
+.video-steps .n{flex:none;width:28px;height:28px;border-radius:var(--r-sm);display:grid;place-items:center;background:var(--green-soft);color:var(--green-ink);font:700 var(--t-xs) var(--display)}
+.video-text .meta{margin-top:20px}
+.video-text .meta a{color:var(--green-ink);font-weight:600}
+@media (prefers-reduced-motion:reduce){.yt img,.yt .play{transition:none}}
+
+/* ---------- products ---------- */
+.products{display:grid;grid-auto-flow:column;grid-auto-columns:78%;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  margin:0 -16px;padding:2px 16px 12px;scrollbar-width:none}
+.products::-webkit-scrollbar{display:none}
+@media (min-width:640px){.products{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;margin:0;padding:0}}
+@media (min-width:1024px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.prod{scroll-snap-align:start;display:flex;flex-direction:column;padding:12px;position:relative}
+.prod-img{position:relative;border-radius:var(--r-md);background:#fff;padding:44px 14px 14px;border:1px solid var(--line);
+  container-type:inline-size;display:grid;place-items:center;min-height:240px}
+/* dimension drawing: photo + height arrow (right), width arrow (below), depth arrow (corner).
+   The grid shrink-wraps the photo so arrows follow its edges for both landscape and portrait shots. */
+.dimfig{display:inline-grid;grid-template-columns:auto auto;grid-template-rows:auto auto;gap:8px 8px;color:#5A524B}
+.dimfig img{grid-column:1;grid-row:1;width:auto;height:auto;max-width:calc(100cqi - 72px);max-height:150px}
+.dim-l{font-size:var(--t-xs);font-weight:600;line-height:1;white-space:nowrap;color:#4A423B}
+.dim-h{grid-column:2;grid-row:1;display:flex;align-items:center;gap:6px}
+.dim-w{grid-column:1;grid-row:2;display:flex;flex-direction:column;align-items:stretch;gap:6px;text-align:center}
+.dim-d{grid-column:2;grid-row:2;display:flex;align-items:center;gap:4px}
+.dim-d .arr-h{width:18px;flex:none;transform:rotate(-40deg)}
+.arr{position:relative;display:block;background:currentColor}
+.arr-v{width:1.5px;align-self:stretch}
+.arr-h{height:1.5px;width:100%}
+.arr::before,.arr::after{content:"";position:absolute;width:0;height:0;border:4px solid transparent}
+.arr-v::before{top:-1px;left:50%;transform:translateX(-50%);border-top:0;border-bottom:7px solid currentColor}
+.arr-v::after{bottom:-1px;left:50%;transform:translateX(-50%);border-bottom:0;border-top:7px solid currentColor}
+.arr-h::before{left:-1px;top:50%;transform:translateY(-50%);border-left:0;border-right:7px solid currentColor}
+.arr-h::after{right:-1px;top:50%;transform:translateY(-50%);border-right:0;border-left:7px solid currentColor}
+.muted{color:var(--muted)}
+.prod-img .pill{position:absolute;top:10px;left:10px}
+.prod-body{padding:16px 6px 4px;display:flex;flex-direction:column;flex:1}
+.prod-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.prod-title h3{font-size:var(--t-lg);color:var(--green-ink)}
+.prod-title h3 small{font:600 var(--t-sm) var(--body);letter-spacing:0;margin-left:2px}
+.specs{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:var(--t-sm);color:var(--ink-2)}
+.specs li{display:flex;gap:10px;align-items:flex-start}
+.specs svg{flex:none;margin-top:2px;color:var(--green)}
+.prod-price{margin-top:auto;padding-top:16px}
+.prod-price .num{display:block;border-top:1px solid var(--line);padding-top:14px;font:600 var(--t-lg)/1.2 var(--display);letter-spacing:-.02em}
+.prod-price .meta{margin-top:2px}
+.products-note{margin-top:14px}
+
+/* ---------- calculator ---------- */
+.calc{padding:72px 0 64px}
+.calc-grid{display:grid;gap:16px;align-items:start}
+@media (min-width:960px){.calc-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}.aside{position:sticky;top:16px}}
+.step{padding:22px 20px}
+.step+.step{border-top:1px solid var(--line)}
+.step-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px}
+.step-head>div{flex:1;min-width:0}
+.step-head .sub{margin-top:4px}
+.step-n{flex:none;width:32px;height:32px;border-radius:var(--r-sm);display:grid;place-items:center;background:var(--green);color:#fff;font:700 var(--t-sm) var(--display)}
+
+label.f,.col-label{display:block;font-size:var(--t-xs);font-weight:500;color:var(--ink-2);margin-bottom:6px}
+.inp{width:100%;height:48px;padding:0 14px;border-radius:var(--r-md);border:1px solid var(--line-strong);background:var(--surface);
+  font-size:var(--t-base);transition:border-color .15s,box-shadow .15s}
+.inp::placeholder{color:var(--muted);opacity:.75}
+.inp:hover{border-color:var(--muted)}
+.inp:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.inp.bad{border-color:var(--neg);box-shadow:0 0 0 3px var(--neg-soft)}
+.unit-field{position:relative}
+.unit-field .inp{padding-right:64px}
+.unit-field .u{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:var(--t-xs);color:var(--muted);pointer-events:none}
+
+.rooms{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.room,.room-head{display:grid;grid-template-columns:minmax(0,1fr) 116px 40px;gap:8px;align-items:center}
+.room{animation:in .2s ease-out}
+.room-head{margin-bottom:6px}
+.room-head .col-label{margin:0}
+.room .unit-field .inp{padding-right:40px}
+.icon-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:var(--r-sm);border:0;background:transparent;color:var(--muted)}
+.icon-btn:hover{background:var(--neg-soft);color:var(--neg)}
+.icon-btn:disabled{opacity:.3;pointer-events:none}
+@keyframes in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.add{margin-top:12px;width:100%;min-height:48px;border-radius:var(--r-md);border:1px dashed var(--line-strong);background:transparent;
+  color:var(--ink-2);font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px}
+.add:hover{border-color:var(--green);color:var(--green-ink);background:var(--green-soft)}
+
+.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:var(--r-md);background:var(--surface-2);border:1px solid var(--line)}
+.seg button{min-height:42px;border:0;border-radius:var(--r-sm);background:transparent;font-size:var(--t-sm);font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08),0 0 0 1px var(--line)}
+.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.val{padding:12px;border-radius:var(--r-md);background:var(--surface-2);border:1px solid var(--line)}
+.val b{display:block;font:600 var(--t-md)/1.2 var(--display);letter-spacing:-.01em}
+.val span{font-size:var(--t-xs);color:var(--muted)}
+.step-foot{padding:0 20px 22px}
+.err{margin:0 0 12px;padding:12px 14px;border-radius:var(--r-md);background:var(--neg-soft);color:var(--neg);font-size:var(--t-sm);font-weight:500}
+
+/* guide (before results) */
+.guide{padding:24px 22px}
+.guide ul{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.guide li{display:flex;gap:12px;align-items:flex-start;font-size:var(--t-base);color:var(--ink-2)}
+.guide li svg{flex:none;margin-top:3px;color:var(--green)}
+.guide .meta{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+
+/* results */
+.results{outline:none;animation:rise .35s ease-out}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.res-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:22px 22px 0}
+.res-head .meta{margin-top:4px}
+.res-block{padding:20px 22px}
+.res-block+.res-block{border-top:1px solid var(--line)}
+.label{font-size:var(--t-sm);font-weight:500;color:var(--ink-2)}
+.total{font:600 var(--t-num)/1.08 var(--display);letter-spacing:-.03em;margin:6px 0 14px}
+.breakdown{display:grid;grid-template-columns:1fr auto;gap:6px 16px;margin:0;font-size:var(--t-sm)}
+.breakdown dt{color:var(--ink-2)}
+.breakdown dd{margin:0;text-align:right;font-weight:600}
+.monthly{background:var(--green-soft)}
+.monthly .bill{font:600 var(--t-xl)/1.1 var(--display);letter-spacing:-.02em;margin:6px 0 4px;color:var(--green-ink)}
+.compare{margin-top:16px;padding-top:16px;border-top:1px solid color-mix(in srgb,var(--green) 25%,transparent)}
+.compare-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:var(--t-sm);font-weight:600}
+.bars{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:90px 1fr auto;gap:10px;align-items:center;font-size:var(--t-xs)}
+.bar .track{height:8px;border-radius:var(--r-pill);background:color-mix(in srgb,var(--ink) 10%,transparent);overflow:hidden}
+.bar .fill{height:100%;border-radius:var(--r-pill);background:var(--muted);transition:width .35s}
+.bar.you .fill{background:var(--green)}
+.bar .v{font-weight:600;min-width:80px;text-align:right}
+.compare p{margin:10px 0 0;font-size:var(--t-sm);color:var(--ink-2)}
+
+.rr{padding:16px 0}
+.rr+.rr{border-top:1px solid var(--line)}
+.rr-top{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center}
+.rr-thumb{width:56px;height:40px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:3px}
+span.rr-thumb{display:block;background:var(--surface-2)}
+.rr-title{min-width:0}
+.rr-name{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rr-name span{font-weight:400;color:var(--muted);font-size:var(--t-sm);margin-left:6px}
+.rr-price{font-weight:600;text-align:right;white-space:nowrap}
+.picks{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.pick{display:grid;grid-template-columns:minmax(0,1fr) auto 40px;gap:8px;align-items:center}
+.sel{width:100%;height:44px;padding:0 34px 0 12px;border-radius:var(--r-md);border:1px solid var(--line-strong);background:var(--surface);
+  font-size:var(--t-sm);font-weight:600;appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236E655D' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center}
+.sel:hover{border-color:var(--muted)}
+.sel:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.qty{display:inline-flex;align-items:center;height:44px;border:1px solid var(--line-strong);border-radius:var(--r-md);background:var(--surface)}
+.qty button{width:38px;height:42px;border:0;background:none;font-size:20px;line-height:1;color:var(--ink-2);border-radius:var(--r-md)}
+.qty button:hover{background:var(--surface-2)}
+.qty button:disabled{opacity:.3;cursor:not-allowed;background:none}
+.qty output{min-width:24px;text-align:center;font-weight:600}
+.rr-none{margin-top:10px}
+.rr-acts{display:flex;flex-wrap:wrap;gap:2px 18px;margin-top:6px}
+.link-btn.act{color:var(--green-ink);text-decoration:none;font-weight:600}
+.link-btn.act:hover{text-decoration:underline}
+.rr-sub{margin-top:4px}
+.rr-warn{margin:10px 0 0;padding:10px 12px;border-radius:var(--r-md);background:var(--amber-soft);color:var(--amber);font-size:var(--t-sm);line-height:1.45}
+.res-note{display:flex;flex-direction:column;gap:6px}
+.res-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 22px 22px}
+
+/* ---------- info (places + contact) ---------- */
+.info{display:grid;gap:16px;padding-bottom:56px}
+@media (min-width:960px){.info{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}}
+.info .card{padding:24px 22px}
+.places{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:18px 0 0;padding:0}
+.places li{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:var(--r-md);background:var(--surface-2);border:1px solid var(--line);font-size:var(--t-sm);font-weight:500}
+.places svg{color:var(--green)}
+.card.contact{background:var(--green);border-color:var(--green);color:#fff}
+.contact h2{color:#fff}
+.contact .sub{color:rgba(255,255,255,.85);margin-top:4px}
+.phones{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.phones a{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 16px;border-radius:var(--r-md);background:rgba(255,255,255,.14);
+  color:#fff;text-decoration:none;font:600 var(--t-lg)/1 var(--display);letter-spacing:.01em}
+.phones a:hover{background:rgba(255,255,255,.22)}
+@media (prefers-color-scheme: dark){.card.contact{background:#1F5A2B;border-color:#1F5A2B}}
+
+footer{border-top:1px solid var(--line);padding:24px 0 32px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+footer b{font:600 var(--t-sm) var(--display);color:var(--green-ink);letter-spacing:-.01em}
+@media (max-width:959px){footer{padding-bottom:calc(96px + env(safe-area-inset-bottom))}}
+
+/* ---------- mobile dock (only when results are off-screen) ---------- */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;transform:translateY(110%);transition:transform .25s ease}
+.dock.on{transform:none}
+.dock .d-l{flex:1;min-width:0}
+.dock .d-v{font:600 var(--t-md)/1.2 var(--display);letter-spacing:-.01em;white-space:nowrap}
+.dock .meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dock .btn{min-height:44px;padding:0 16px;font-size:var(--t-sm)}
+@media (min-width:960px){.dock{display:none}}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:30;
+  background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:var(--r-pill);font-size:var(--t-sm);font-weight:500;
+  transition:opacity .2s,transform .2s;box-shadow:0 10px 30px -10px rgba(0,0,0,.4)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:480px){
+  .room,.room-head{grid-template-columns:minmax(0,1fr) 100px 36px;gap:6px}
+  .step{padding:20px 16px}.step-foot{padding:0 16px 20px}
+  .res-head,.res-block{padding-left:18px;padding-right:18px}.res-actions{padding:0 18px 18px}
+  .val{padding:10px}
+}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="ECO WARM — нүүр">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+        <path d="M4 22C4 11 10 4 23 3c0 12-6 19-17 19" fill="var(--green)"/>
+        <path d="M6 21 15 11" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span><span class="e">Eco</span><span class="w">warm</span></span>
+    </a>
+    <a class="btn" href="tel:90353090" aria-label="Утасдах: 9035 3090">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+      9035 3090
+    </a>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- 1. Hero: one message, one primary action -->
+  <section class="hero">
+    <div>
+      <span class="eyebrow">Дулаанаа нөөцлөдөг тоосгон халаагуур</span>
+      <h1>Дулаан гэрийнхээ <em>зардлыг</em> тооцоол</h1>
+      <p class="lede">Өрөөнийхөө талбайг оруулаад танд тохирох ECO WARM халаагуур, нийт үнэ болон сарын цахилгааны төлбөрөө мэдээрэй.</p>
+      <div class="hero-cta">
+        <a class="btn btn-action btn-lg" href="#calc">
+          Тооцоолол хийх
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-lg" href="#models">Загвар, үнэ харах</a>
+      </div>
+    </div>
+    <figure class="hero-img">
+      <img src="img/hero.jpg" width="1400" height="788" alt="ECO WARM тоосгон халаагуур ба дулаан хуримтлуулагч магни тоосго" fetchpriority="high">
+    </figure>
+  </section>
+
+  <!-- 2. Features: six facts from the poster, one grid -->
+  <ul class="features" aria-label="Онцлог">
+    <li class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c1 4 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5.3 2 1.5 3 2.5 3C11 8 11 5 12 2z"/></svg></span><div><b>8 цаг</b><span>цэнэглэгдэнэ</span></div></li>
+    <li class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7c2-2 4 2 6 0s4 2 6 0 4 2 4 2M4 12c2-2 4 2 6 0s4 2 6 0 4 2 4 2M4 17c2-2 4 2 6 0s4 2 6 0 4 2 4 2"/></svg></span><div><b>16 цаг</b><span>дулаанаа барина</span></div></li>
+    <li class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h8v5H3zM13 9h8v5h-8zM8 14h8v5H8zM3 14h5v5H3zM16 14h5v5h-5zM8 4h8v5H8z"/></svg></span><div><b>Магни тоосго</b><span>дулаан хуримтлуулна</span></div></li>
+    <li class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M14 14.8V4a2 2 0 1 0-4 0v10.8a4 4 0 1 0 4 0z"/></svg></span><div><b>Температур</b><span>тохируулгатай</span></div></li>
+    <li class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1" fill="currentColor"/></svg></span><div><b>Wi-Fi</b><span>удирдлагатай</span></div></li>
+    <li class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19l7-7"/></svg></span><div><b>Эрчим хүч</b><span>хэмнэлттэй</span></div></li>
+  </ul>
+
+  <!-- 3. Models -->
+  <section id="models" aria-labelledby="h-models">
+    <div class="sec-head">
+      <h2 id="h-models" class="sec-title">Загвар ба үнэ</h2>
+      <p class="lede">Өрөөний талбайд тохирсон 4 загвар. Бүх загвар 220V, 50Hz сүлжээнд ажиллана.</p>
+    </div>
+    <div class="products" id="catalog"></div>
+    <p class="meta products-note">Үнэ НӨАТ-гүй. Халаах талбай нь жишиг; таазны өндөр, дулаалгаас хамаарч өөрчлөгдөнө.</p>
+  </section>
+
+  <!-- 4. Calculator -->
+  <section class="calc" id="calc" aria-labelledby="h-calc">
+    <div class="sec-head">
+      <h2 id="h-calc" class="sec-title">Тооцоолол хийх</h2>
+      <p class="lede">Өрөөний мэдээлэл болон цахилгааны хэрэглээг оруулснаар танд тохирох халаагуур, бүтээгдэхүүний нийт үнэ (НӨАТ-тэй), сарын цахилгааны хэрэглээ ба төлбөрийг тооцоолно.</p>
+    </div>
+
+    <div class="calc-grid">
+      <div class="card">
+        <div class="step">
+          <div class="step-head">
+            <span class="step-n">1</span>
+            <div><h3 class="step-title">Өрөөний мэдээлэл</h3><p class="sub">Халаах өрөө бүрийн нэр, талбайг оруулна уу.</p></div>
+            <button class="link-btn" type="button" id="reset">Цэвэрлэх</button>
+          </div>
+          <div class="room-head" aria-hidden="true"><span class="col-label">Өрөөний нэр</span><span class="col-label">Талбай</span><span></span></div>
+          <ol class="rooms" id="rooms"></ol>
+          <button class="add" type="button" id="addRoom">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            Өрөө нэмэх
+          </button>
+        </div>
+
+        <div class="step">
+          <div class="step-head">
+            <span class="step-n">2</span>
+            <div><h3 class="step-title">Цахилгааны хэрэглээ</h3><p class="sub">Халаагуур хэдэн цаг ажиллах, цахилгааны тариф.</p></div>
+          </div>
+          <div class="seg" role="group" aria-label="Хэрэглээний утга">
+            <button type="button" id="modeStd" aria-pressed="true">Жишиг утга</button>
+            <button type="button" id="modeCustom" aria-pressed="false">Өөрөө оруулах</button>
+          </div>
+          <div class="row3" id="stdVals">
+            <div class="val"><b>8 цаг</b><span>өдөрт</span></div>
+            <div class="val"><b>30 хоног</b><span>сард</span></div>
+            <div class="val"><b>184₮</b><span>кВт.ц тутамд</span></div>
+          </div>
+          <div class="row3" id="customVals" hidden>
+            <div>
+              <label class="f" for="hours">Цаг / өдөр</label>
+              <div class="unit-field"><input class="inp" id="hours" type="number" inputmode="decimal" min="0" max="24" step="0.5"><span class="u">цаг</span></div>
+            </div>
+            <div>
+              <label class="f" for="days">Хоног / сар</label>
+              <div class="unit-field"><input class="inp" id="days" type="number" inputmode="numeric" min="0" max="31" step="1"><span class="u">хоног</span></div>
+            </div>
+            <div>
+              <label class="f" for="tariff">Тариф</label>
+              <div class="unit-field"><input class="inp" id="tariff" type="number" inputmode="decimal" min="0" step="1"><span class="u">₮/кВт.ц</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-foot">
+          <p class="err" id="err" role="alert" hidden>Дор хаяж нэг өрөөний талбайг оруулна уу.</p>
+          <button class="btn btn-action btn-lg btn-block" type="button" id="recalc">
+            <span id="recalcLbl">Тооцоолох</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="aside">
+        <!-- shown before the first calculation -->
+        <div class="card guide" id="guide">
+          <h3 class="card-title">Тооцоолсны дараа харах зүйлс</h3>
+          <ul>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Өрөө бүрт тохирох загвар, ширхэг</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Бүтээгдэхүүний нийт үнэ, НӨАТ 10% тусдаа</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Сарын цахилгааны хэрэглээ ба төлбөр</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Таны тарифыг 184₮/кВт.ц жишигтэй харьцуулалт</li>
+          </ul>
+          <p class="meta">Тооцоо урьдчилсан бөгөөд өгөгдөл зөвхөн таны төхөөрөмж дээр хадгалагдана.</p>
+        </div>
+
+        <!-- shown after «Тооцоолох» -->
+        <section class="card results" id="results" aria-labelledby="h-res" hidden tabindex="-1">
+          <div class="res-head">
+            <div><h3 id="h-res" class="card-title">Тооцооны үр дүн</h3><p class="meta" id="resMeta"></p></div>
+          </div>
+
+          <div class="res-block" aria-live="polite">
+            <div class="label">Бүтээгдэхүүний нийт үнэ, НӨАТ-тэй</div>
+            <div class="total" id="grand">0₮</div>
+            <dl class="breakdown">
+              <dt>Төхөөрөмжийн дүн (НӨАТ-гүй)</dt><dd id="subtotal">0₮</dd>
+              <dt>НӨАТ 10%</dt><dd id="vat">0₮</dd>
+            </dl>
+          </div>
+
+          <div class="res-block monthly">
+            <div class="label">Сарын цахилгааны төлбөр</div>
+            <div class="bill" id="bill">0₮</div>
+            <p class="sub" id="billMeta"></p>
+            <div class="compare" id="compare" hidden>
+              <div class="compare-head"><span>Жишиг тарифтай харьцуулалт</span><span class="pill" id="diffPill"></span></div>
+              <div class="bars">
+                <div class="bar you"><span id="barYouLbl">Таны тариф</span><div class="track"><div class="fill" id="barYou"></div></div><span class="v" id="barYouVal">0₮</span></div>
+                <div class="bar"><span>Жишиг 184₮</span><div class="track"><div class="fill" id="barStd"></div></div><span class="v" id="barStdVal">0₮</span></div>
+              </div>
+              <p id="diffText"></p>
+            </div>
+          </div>
+
+          <div class="res-block">
+            <div class="label">Өрөө тус бүрээр</div>
+            <p class="meta" style="margin-top:2px">Загвар болон ширхэгийг өрөө бүрт өөрчилж болно.</p>
+            <div id="roomResults"></div>
+          </div>
+
+          <div class="res-block res-note">
+            <p class="meta" id="incomingNote" hidden>3.2 кВт загвар ирж буй нөөц тул нийлүүлэх хугацааг тохиролцоно.</p>
+            <p class="meta">Сарын хэрэглээг бүрэн чадлаар ажиллана гэж тооцов. 28 м²-ээс том өрөөнд 3.2 кВт загвараар 28 м² тутмыг хамруулж, үлдсэнд тохирох загвар нэмнэ.</p>
+          </div>
+
+          <div class="res-actions">
+            <button class="btn btn-ink" type="button" id="copy">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+              Хуулах
+            </button>
+            <button class="btn" type="button" id="share">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4M12 2v13"/></svg>
+              Хуваалцах
+            </button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Video guide: thumbnail first, the YouTube player loads only on click -->
+  <section class="video" id="video" aria-labelledby="h-video">
+    <div class="yt" id="yt" data-id="FLGh-Tyijrc">
+      <button type="button" aria-label="Угсралт ба апп холболтын заавар бичлэгийг тоглуулах">
+        <img src="https://i.ytimg.com/vi/FLGh-Tyijrc/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy"
+             onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/FLGh-Tyijrc/hqdefault.jpg'">
+        <span class="play" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+        <span class="cap" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M10 9l5 3-5 3z" fill="currentColor"/></svg>Дарж үзэх</span>
+      </button>
+    </div>
+    <div class="video-text">
+      <span class="eyebrow">Видео заавар</span>
+      <h2 id="h-video" class="sec-title">Угсралт ба апп холболт</h2>
+      <p class="lede">Халаагуураа хэрхэн угсарч, утасныхаа аппад холбохыг бичлэгээс алхам алхмаар үзээрэй.</p>
+      <ol class="video-steps">
+        <li><span class="n">1</span><span>Магни тоосгыг байрлуулж, халаагуураа угсрах</span></li>
+        <li><span class="n">2</span><span>Wi-Fi аппад холбож, утаснаасаа удирдах</span></li>
+      </ol>
+      <p class="meta">Тусламж хэрэгтэй бол <a href="tel:90353090">9035 3090</a> руу залгаарай.</p>
+    </div>
+  </section>
+
+  <!-- 6. Where to use + contact -->
+  <div class="info">
+    <section class="card" aria-labelledby="h-places">
+      <h2 id="h-places" class="card-title">Хэрэглэх боломжтой газар</h2>
+      <ul class="places">
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9H3z"/><path d="M10 20v-5h4v5"/></svg>Гэр, орон сууц</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l9-6 9 6M5 11v8h14v-8"/><path d="M10 19v-4h4v4"/></svg>Монгол гэр</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="11" rx="1"/><path d="M8 20h8M12 15v5"/></svg>Оффис</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 9l1-5h14l1 5M4 9v11h16V9M4 9h16"/><path d="M9 20v-6h6v6"/></svg>Дэлгүүр</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-6 9 6v10H3z"/><path d="M7 20v-7h10v7M7 16h10"/></svg>Агуулах</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10l8-6 8 6v10z"/><circle cx="12" cy="13" r="2.5"/></svg>Амралтын байр</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M12 1v2M5 8H3M21 8h-2M6.5 3.5 8 5M17.5 3.5 16 5M4 21l2-7h12l2 7zM9 14l-1 7M15 14l1 7"/></svg>Нарны системтэй</li>
+      </ul>
+    </section>
+    <section class="card contact" aria-labelledby="h-contact">
+      <h2 id="h-contact" class="card-title">Холбоо барих</h2>
+      <p class="sub">Захиалга, зөвлөгөө, суурилуулалт</p>
+      <div class="phones">
+        <a href="tel:90353090"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>9035 3090</a>
+        <a href="tel:86961797"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>8696 1797</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>Илүү ухаалаг · Илүү хэмнэлттэй · Илүү тав тухтай</b>
+    <span class="meta">© ECO WARM · Тоосгон халаагуур</span>
+  </div>
+</footer>
+
+<div class="dock" id="dock" aria-hidden="true">
+  <div class="d-l">
+    <div class="d-v" id="dockTotal">0₮</div>
+    <div class="meta" id="dockBill">НӨАТ-тэй · сард 0₮</div>
+  </div>
+  <button class="btn btn-ink" type="button" id="dockRes" tabindex="-1">Үр дүн харах</button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const MODELS = [
+    // w × d × h in mm, from the manufacturer's spec sheet (HYXR series)
+    { kw: 0.8, code: 'HYXR-800W',  area: 9,  price: 960000,  bricks: 4,  weight: 30,  w: 450,  d: 225, h: 680, img: 'img/heater-08.jpg', imgW: 480, imgH: 565, isNew: true },
+    { kw: 1.6, code: 'HYXR-1600W', area: 16, price: 1235000, bricks: 8,  weight: 60,  w: 680,  d: 225, h: 680, img: 'img/heater.jpg', imgW: 720, imgH: 415 },
+    { kw: 2.4, code: 'HYXR-2400W', area: 20, price: 1362000, bricks: 12, weight: 90,  w: 910,  d: 225, h: 680, img: 'img/heater.jpg', imgW: 720, imgH: 415 },
+    { kw: 3.2, code: 'HYXR-3200W', area: 28, price: 1490000, bricks: 16, weight: 120, w: 1140, d: 225, h: 680, img: 'img/heater.jpg', imgW: 720, imgH: 415, incoming: true },
+  ];
+  const PHONES = '9035 3090, 8696 1797';
+  const STD = { hours: 8, days: 30, tariff: 184 };
+  const VAT = 0.10;
+  const KEY = 'ecowarm-calc-v3';
+  const ICON = {
+    area: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 3v18"/></svg>',
+    brick: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h8v5H3zM13 9h8v5h-8zM8 14h8v5H8zM3 14h5v5H3zM16 14h5v5h-5zM8 4h8v5H8z"/></svg>',
+    ruler: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 17 17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2"/></svg>',
+  };
+
+  const $ = id => document.getElementById(id);
+  const fmt = n => Math.round(n).toLocaleString('en-US');
+  const mnt = n => fmt(n) + '₮';
+  const kw = n => (Math.round(n * 10) / 10).toLocaleString('en-US', { maximumFractionDigits: 1 });
+  const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isFinite(n) && n > 0 ? n : 0; };
+  const esc = s => s.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+
+  // ---------- state: shared link > localStorage > empty ----------
+  let uid = 0;
+  let fromLink = false;   // a shared link opens straight to its results
+  let shown = false;      // results stay hidden until «Тооцоолох» is pressed
+  const defaultState = () => ({ rooms: [{ id: ++uid, name: '', area: '' }], mode: 'std', hours: STD.hours, days: STD.days, tariff: STD.tariff });
+  function normalize(s) {
+    const src = s.r || s.rooms;
+    const cleanPick = p => Array.isArray(p)
+      ? p.map(x => ({ kw: Number(x.kw), qty: Math.max(1, Math.min(20, parseInt(x.qty, 10) || 1)) })).filter(x => MODELS.some(m => m.kw === x.kw))
+      : null;
+    const rooms = Array.isArray(src) ? src.map(r => ({ id: ++uid, name: r.n ?? r.name ?? '', area: String(r.a ?? r.area ?? ''), pick: cleanPick(r.p ?? r.pick) })) : [];
+    return {
+      rooms: rooms.length ? rooms : defaultState().rooms,
+      mode: (s.m || s.mode) === 'custom' ? 'custom' : 'std',
+      hours: s.h ?? s.hours ?? STD.hours, days: s.d ?? s.days ?? STD.days, tariff: s.t ?? s.tariff ?? STD.tariff,
+    };
+  }
+  function load() {
+    try {
+      if (location.hash.startsWith('#s=')) {
+        const s = JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(3)))));
+        history.replaceState(null, '', location.pathname);
+        fromLink = true;
+        return normalize(s);
+      }
+    } catch (e) {}
+    try { const s = JSON.parse(localStorage.getItem(KEY)); if (s) return normalize(s); } catch (e) {}
+    return defaultState();
+  }
+  let state = load();
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+  const compact = () => ({ r: state.rooms.map(r => ({ n: r.name, a: r.area, ...(r.pick ? { p: r.pick } : {}) })), m: state.mode, h: state.hours, d: state.days, t: state.tariff });
+
+  // ---------- sizing: biggest model covers whole chunks, smallest fitting model takes the rest ----------
+  function pick(area) {
+    const max = MODELS[MODELS.length - 1];
+    const units = [];
+    let rest = area;
+    while (rest > max.area + 1e-9) { units.push(max); rest -= max.area; }
+    if (rest > 1e-9) units.push(MODELS.find(m => m.area >= rest - 1e-9));
+    const grouped = [];
+    units.forEach(m => { const g = grouped.find(x => x.m === m); g ? g.qty++ : grouped.push({ m, qty: 1 }); });
+    return grouped.sort((a, b) => b.m.kw - a.m.kw);
+  }
+  function calc() {
+    const custom = state.mode === 'custom';
+    const hours = custom ? num(state.hours) : STD.hours;
+    const days = custom ? num(state.days) : STD.days;
+    const tariff = custom ? num(state.tariff) : STD.tariff;
+    const rooms = state.rooms.map((r, i) => {
+      const area = num(r.area);
+      const name = r.name.trim() || `Өрөө ${i + 1}`;
+      if (!area) return { id: r.id, name, area: 0, items: [], qty: 0, kw: 0, price: 0, kwh: 0, bill: 0 };
+      // recommendation, unless the user picked models/quantities for this room by hand
+      const rec = pick(area);
+      const custom = Array.isArray(r.pick);
+      const items = custom ? r.pick.map(p => ({ m: MODELS.find(m => m.kw === p.kw), qty: p.qty })).filter(g => g.m && g.qty > 0) : rec;
+      const totalKw = items.reduce((s, g) => s + g.m.kw * g.qty, 0);
+      const cover = items.reduce((s, g) => s + g.m.area * g.qty, 0);
+      const kwh = totalKw * hours * days;
+      return { id: r.id, name, area, items, rec, custom, cover, short: cover < area - 1e-9,
+               qty: items.reduce((s, g) => s + g.qty, 0), kw: totalKw,
+               price: items.reduce((s, g) => s + g.m.price * g.qty, 0), kwh, bill: kwh * tariff };
+    });
+    const sum = k => rooms.reduce((s, r) => s + r[k], 0);
+    const subtotal = sum('price'), kwh = sum('kwh');
+    return { hours, days, tariff, rooms, subtotal, vat: subtotal * VAT, grand: subtotal * (1 + VAT), qty: sum('qty'), kw: sum('kw'),
+             kwh, bill: kwh * tariff, billStd: kwh * STD.tariff, incoming: rooms.some(r => r.items.some(g => g.m.incoming)) };
+  }
+
+  // ---------- catalog ----------
+  $('catalog').innerHTML = MODELS.map(m => `
+    <article class="card prod">
+      <div class="prod-img">
+        ${m.isNew ? '<span class="pill pill-green">Шинэ</span>' : ''}${m.incoming ? '<span class="pill pill-amber">Ирж буй нөөц</span>' : ''}
+        <div class="dimfig" role="img" aria-label="ECO WARM ${kw(m.kw)} кВт: өргөн ${m.w}, гүн ${m.d}, өндөр ${m.h} мм">
+          <img src="${m.img}" alt="" loading="lazy" width="${m.imgW}" height="${m.imgH}">
+          <div class="dim-h" aria-hidden="true"><span class="arr arr-v"></span><span class="dim-l">${m.h} мм</span></div>
+          <div class="dim-w" aria-hidden="true"><span class="arr arr-h"></span><span class="dim-l">${m.w} мм</span></div>
+          <div class="dim-d" aria-hidden="true"><span class="arr arr-h"></span><span class="dim-l">${m.d} мм</span></div>
+        </div>
+      </div>
+      <div class="prod-body">
+        <div class="prod-title"><h3>${kw(m.kw)}<small>кВт</small></h3><span class="pill pill-neutral">${m.area} м² хүртэл</span></div>
+        <p class="meta">${m.code}</p>
+        <ul class="specs">
+          <li>${ICON.brick}<span>${m.bricks} магни тоосго · ${m.weight} кг</span></li>
+          <li>${ICON.ruler}<span>${m.w} × ${m.d} × ${m.h} мм</span></li>
+        </ul>
+        <div class="prod-price"><span class="num">${mnt(m.price)}</span><p class="meta">НӨАТ-тэй ${mnt(m.price * (1 + VAT))}</p></div>
+      </div>
+    </article>`).join('');
+
+  // ---------- rooms editor ----------
+  const roomsEl = $('rooms');
+  function renderRooms(focusLast) {
+    roomsEl.innerHTML = '';
+    state.rooms.forEach((r, i) => {
+      const li = document.createElement('li');
+      li.className = 'room';
+      li.innerHTML = `
+        <input class="inp" type="text" aria-label="Өрөө ${i + 1}-ийн нэр" placeholder="${i === 0 ? 'Зочны өрөө' : 'Өрөө ' + (i + 1)}" enterkeyhint="next">
+        <div class="unit-field"><input class="inp" type="number" inputmode="decimal" min="0" step="0.5" aria-label="Өрөө ${i + 1}-ийн талбай, м²" placeholder="${i === 0 ? '18' : '0'}" enterkeyhint="next"><span class="u">м²</span></div>
+        <button class="icon-btn" type="button" aria-label="Өрөө ${i + 1}-ийг устгах" ${state.rooms.length < 2 ? 'disabled' : ''}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>`;
+      const [nameI, areaI] = li.querySelectorAll('input');
+      nameI.value = r.name; areaI.value = r.area;
+      nameI.addEventListener('input', () => { r.name = nameI.value; update(); });
+      areaI.addEventListener('input', () => { r.area = areaI.value; clearErr(); update(); });
+      li.querySelector('button').addEventListener('click', () => { state.rooms = state.rooms.filter(x => x !== r); renderRooms(); update(); });
+      roomsEl.appendChild(li);
+    });
+    if (focusLast) roomsEl.lastElementChild.querySelectorAll('input')[0].focus();
+  }
+  $('addRoom').onclick = () => { state.rooms.push({ id: ++uid, name: '', area: '' }); renderRooms(true); update(); };
+  function clearErr() { $('err').hidden = true; roomsEl.querySelectorAll('.inp.bad').forEach(i => i.classList.remove('bad')); }
+
+  // ---------- usage ----------
+  const hoursI = $('hours'), daysI = $('days'), tariffI = $('tariff');
+  function syncMode() {
+    const custom = state.mode === 'custom';
+    $('modeStd').setAttribute('aria-pressed', !custom);
+    $('modeCustom').setAttribute('aria-pressed', custom);
+    $('stdVals').hidden = custom;
+    $('customVals').hidden = !custom;
+    hoursI.value = state.hours; daysI.value = state.days; tariffI.value = state.tariff;
+  }
+  $('modeStd').onclick = () => { state.mode = 'std'; syncMode(); update(); };
+  $('modeCustom').onclick = () => { state.mode = 'custom'; syncMode(); update(); hoursI.focus(); };
+  hoursI.oninput = () => { state.hours = hoursI.value; update(); };
+  daysI.oninput = () => { state.days = daysI.value; update(); };
+  tariffI.oninput = () => { state.tariff = tariffI.value; update(); };
+
+  // ---------- results ----------
+  let last;
+  function renderResults(c) {
+    $('grand').textContent = mnt(c.grand);
+    $('subtotal').textContent = mnt(c.subtotal);
+    $('vat').textContent = mnt(c.vat);
+    $('resMeta').textContent = `${c.rooms.filter(r => r.area).length} өрөө · ${c.qty} ширхэг · нийт ${kw(c.kw)} кВт`;
+    $('bill').textContent = mnt(c.bill);
+    $('billMeta').textContent = `${fmt(c.kwh)} кВт.ц · ${kw(c.hours)} цаг × ${fmt(c.days)} хоног · ${fmt(c.tariff)}₮/кВт.ц`;
+    $('dockTotal').textContent = mnt(c.grand);
+    $('dockBill').textContent = `НӨАТ-тэй · сард ${mnt(c.bill)}`;
+    $('incomingNote').hidden = !c.incoming;
+
+    // tariff comparison only matters when the tariff differs from the 184₮ reference
+    const tDiff = c.tariff - STD.tariff, diff = c.bill - c.billStd;
+    $('compare').hidden = Math.abs(tDiff) < 1e-9;
+    if (!$('compare').hidden) {
+      const max = Math.max(c.bill, c.billStd, 1), up = tDiff > 0;
+      $('barYou').style.width = (c.bill / max * 100) + '%';
+      $('barStd').style.width = (c.billStd / max * 100) + '%';
+      $('barYouVal').textContent = mnt(c.bill);
+      $('barStdVal').textContent = mnt(c.billStd);
+      $('barYouLbl').textContent = `Таны ${fmt(c.tariff)}₮`;
+      $('diffPill').className = 'pill ' + (up ? 'pill-neg' : 'pill-pos');
+      $('diffPill').textContent = `${up ? '+' : '−'}${mnt(Math.abs(diff))} / сар`;
+      $('diffText').textContent = `Таны тариф жишгээс ${fmt(Math.abs(tDiff))}₮/кВт.ц (${(Math.abs(tDiff) / STD.tariff * 100).toFixed(1)}%) ${up ? 'өндөр' : 'бага'} тул жилд ${mnt(Math.abs(diff) * 12)}-ээр ${up ? 'илүү' : 'бага'} төлнө.`;
+    }
+
+    $('roomResults').innerHTML = c.rooms.map(roomRow).join('');
+  }
+
+  // one room in the results: editable model + quantity lines
+  const recText = items => items.map(g => `${kw(g.m.kw)} кВт × ${g.qty}`).join(' + ');
+  const modelOptions = sel => MODELS.map(m =>
+    `<option value="${m.kw}" ${m.kw === sel ? 'selected' : ''}>${kw(m.kw)} кВт · ${m.area} м²${m.incoming ? ' · нөөц' : ''}</option>`).join('');
+  function roomRow(r) {
+    if (!r.area) return `
+      <div class="rr"><div class="rr-top"><span class="rr-thumb"></span><div><span class="rr-name">${esc(r.name)}</span><p class="meta">Талбай оруулаагүй</p></div><span></span></div></div>`;
+    const lines = r.items.map((g, j) => `
+      <li class="pick">
+        <select class="sel" data-id="${r.id}" data-act="model" data-j="${j}" aria-label="${esc(r.name)}: ${j + 1}-р загвар">${modelOptions(g.m.kw)}</select>
+        <div class="qty" role="group" aria-label="Ширхэг">
+          <button type="button" data-id="${r.id}" data-act="dec" data-j="${j}" aria-label="Ширхэг хасах" ${g.qty <= 1 ? 'disabled' : ''}>−</button>
+          <output aria-live="polite">${g.qty}</output>
+          <button type="button" data-id="${r.id}" data-act="inc" data-j="${j}" aria-label="Ширхэг нэмэх" ${g.qty >= 20 ? 'disabled' : ''}>+</button>
+        </div>
+        <button class="icon-btn" type="button" data-id="${r.id}" data-act="del" data-j="${j}" aria-label="Энэ загварыг хасах">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </li>`).join('');
+    return `
+      <div class="rr">
+        <div class="rr-top">
+          ${r.items.length ? `<img class="rr-thumb" src="${r.items[0].m.img}" alt="">` : '<span class="rr-thumb"></span>'}
+          <div class="rr-title"><span class="rr-name">${esc(r.name)}<span>${kw(r.area)} м²</span></span>
+            <p class="meta">${r.custom ? 'Гараар сонгосон' : 'Санал болгосон'}</p></div>
+          <span class="rr-price">${mnt(r.price)}</span>
+        </div>
+        ${r.items.length ? `<ul class="picks">${lines}</ul>` : '<p class="meta rr-none">Төхөөрөмж сонгоогүй байна.</p>'}
+        <div class="rr-acts">
+          <button class="link-btn act" type="button" data-id="${r.id}" data-act="add">+ Загвар нэмэх</button>
+          ${r.custom ? `<button class="link-btn" type="button" data-id="${r.id}" data-act="auto">Санал болгосноор сэргээх</button>` : ''}
+        </div>
+        <p class="sub rr-sub">Хамрах талбай ${kw(r.cover)} м² · сард ${fmt(r.kwh)} кВт.ц, ${mnt(r.bill)}</p>
+        ${r.short ? `<p class="rr-warn">Сонгосон төхөөрөмж ${kw(r.cover)} м² хүртэл халаана, өрөө ${kw(r.area)} м². Санал болгосон: ${recText(r.rec)}.</p>` : ''}
+      </div>`;
+  }
+
+  // edits in the results list: change model, quantity, add/remove a line, or go back to the recommendation
+  function editRoom(id, act, j, value) {
+    const room = state.rooms.find(x => x.id === id);
+    if (!room) return;
+    if (act === 'auto') { room.pick = null; return; }
+    if (!Array.isArray(room.pick)) room.pick = pick(num(room.area)).map(g => ({ kw: g.m.kw, qty: g.qty }));
+    const p = room.pick, line = p[j];
+    if (act === 'inc' && line) line.qty = Math.min(20, line.qty + 1);
+    if (act === 'dec' && line) line.qty = Math.max(1, line.qty - 1);
+    if (act === 'del' && line) p.splice(j, 1);
+    if (act === 'model' && line) {
+      const same = p.findIndex((x, k) => k !== j && x.kw === value);
+      if (same >= 0) { p[same].qty = Math.min(20, p[same].qty + line.qty); p.splice(j, 1); }   // merge duplicates
+      else line.kw = value;
+    }
+    if (act === 'add') {
+      const unused = MODELS.find(m => !p.some(x => x.kw === m.kw));
+      if (unused) p.push({ kw: unused.kw, qty: 1 }); else p[p.length - 1].qty = Math.min(20, p[p.length - 1].qty + 1);
+    }
+  }
+  function onRoomEdit(e) {
+    const el = e.target.closest('[data-act]');
+    if (!el || (e.type === 'click' && el.tagName === 'SELECT')) return;
+    const id = +el.dataset.id, act = el.dataset.act, j = +el.dataset.j;
+    editRoom(id, act, j, el.tagName === 'SELECT' ? Number(el.value) : undefined);
+    update();
+    // keep keyboard focus on the same control after the list re-renders
+    const box = $('roomResults');
+    const again = box.querySelector(`[data-id="${id}"][data-act="${act}"][data-j="${j}"]`)
+      || box.querySelector(`[data-id="${id}"][data-act="add"]`);
+    if (again && !again.disabled) again.focus(); else box.querySelector(`[data-id="${id}"][data-act="add"]`)?.focus();
+  }
+  $('roomResults').addEventListener('click', onRoomEdit);
+  $('roomResults').addEventListener('change', onRoomEdit);
+
+  // ---------- copy text ----------
+  function proposal(c) {
+    const d = new Date();
+    const date = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+    const L = ['ECO WARM тоосгон халаагуур — тооцоо', `Огноо: ${date}`, ''];
+    c.rooms.filter(r => r.area).forEach((r, i) => {
+      L.push(`${i + 1}. ${r.name} — ${kw(r.area)} м²`);
+      r.items.forEach(g => L.push(`   ${kw(g.m.kw)} кВт × ${g.qty} ширхэг = ${mnt(g.m.price * g.qty)}${g.m.incoming ? ' (ирж буй нөөц)' : ''}`));
+      L.push(`   Сарын хэрэглээ: ${fmt(r.kwh)} кВт.ц · төлбөр ${mnt(r.bill)}`);
+      if (r.short) L.push(`   Анхааруулга: сонгосон төхөөрөмж ${kw(r.cover)} м² хүртэл халаана (өрөө ${kw(r.area)} м²).`);
+    });
+    L.push('', `Төхөөрөмж (${c.qty} ширхэг), НӨАТ-гүй: ${mnt(c.subtotal)}`, `НӨАТ 10%: ${mnt(c.vat)}`, `НИЙТ, НӨАТ-тэй: ${mnt(c.grand)}`);
+    L.push('', `Сарын цахилгааны төлбөр: ${mnt(c.bill)} (${fmt(c.kwh)} кВт.ц, ${kw(c.hours)} цаг × ${fmt(c.days)} хоног, ${fmt(c.tariff)}₮/кВт.ц)`);
+    if (Math.abs(c.tariff - STD.tariff) > 1e-9) {
+      const diff = c.bill - c.billStd;
+      L.push(`Жишиг 184₮/кВт.ц-тай харьцуулахад: ${diff > 0 ? '+' : '−'}${mnt(Math.abs(diff))} / сар`);
+    }
+    if (c.incoming) L.push('', '* 3.2 кВт загвар — ирж буй нөөц, нийлүүлэх хугацааг тохиролцоно.');
+    L.push('', 'ECO WARM — 8 цаг цэнэглэгдэж, 16 цаг дулаанаа барина.', `Холбоо барих: ${PHONES}`);
+    return L.join('\n');
+  }
+
+  // ---------- update / show ----------
+  function update() { last = calc(); if (shown) renderResults(last); save(); }
+  function showResults(scroll) {
+    shown = true;
+    renderResults(last);
+    $('guide').hidden = true;
+    $('results').hidden = false;
+    $('recalcLbl').textContent = 'Дахин тооцоолох';
+    syncDock();
+    if (scroll) { $('results').scrollIntoView({ behavior: 'smooth', block: 'start' }); $('results').focus({ preventScroll: true }); }
+  }
+  function hideResults() {
+    shown = false;
+    $('guide').hidden = false;
+    $('results').hidden = true;
+    $('recalcLbl').textContent = 'Тооцоолох';
+    syncDock();
+  }
+
+  // dock: only after a calculation, only while the results card is off-screen below/above the calculator
+  let resVisible = false;
+  new IntersectionObserver(([e]) => { resVisible = e.isIntersecting; syncDock(); }, { threshold: 0.15 }).observe($('results'));
+  function syncDock() {
+    const pastCalc = window.scrollY + window.innerHeight > $('calc').offsetTop + 200;
+    const on = shown && !resVisible && pastCalc;
+    $('dock').classList.toggle('on', on);
+    $('dock').setAttribute('aria-hidden', String(!on));
+    $('dockRes').tabIndex = on ? 0 : -1;
+  }
+  window.addEventListener('scroll', syncDock, { passive: true });
+
+  // ---------- actions ----------
+  const toast = msg => { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 1800); };
+  async function copyText(text, msg) {
+    try { await navigator.clipboard.writeText(text); }
+    catch (e) { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+    toast(msg);
+  }
+  const shareUrl = () => location.origin + location.pathname + '#s=' + btoa(unescape(encodeURIComponent(JSON.stringify(compact()))));
+  $('copy').onclick = () => copyText(proposal(last), 'Тооцоо хуулагдлаа');
+  $('share').onclick = async () => {
+    const text = proposal(last), url = shareUrl();
+    if (navigator.share) { try { await navigator.share({ title: 'ECO WARM тооцоо', text, url }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+    copyText(text + '\n\n' + url, 'Тооцоо ба линк хуулагдлаа');
+  };
+  $('recalc').onclick = () => {
+    update();
+    if (!last.rooms.some(r => r.area)) {
+      $('err').hidden = false;
+      const areas = roomsEl.querySelectorAll('.unit-field .inp');
+      areas.forEach(i => { if (!num(i.value)) i.classList.add('bad'); });
+      areas[0].focus();
+      return;
+    }
+    const again = shown;
+    showResults(true);
+    if (again) toast('Дахин тооцооллоо');
+  };
+  $('dockRes').onclick = () => $('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  $('reset').onclick = () => {
+    if (!confirm('Оруулсан бүх мэдээллийг цэвэрлэх үү?')) return;
+    state = defaultState();
+    hideResults(); clearErr(); renderRooms(true); syncMode(); update();
+  };
+
+  // ---------- init ----------
+  renderRooms(); syncMode(); update();
+  if (fromLink && last.rooms.some(r => r.area)) showResults(false);
+
+  /* Video facade: swap the thumbnail for the real player on the first click. */
+  const yt = $('yt');
+  yt.querySelector('button').addEventListener('click', () => {
+    const f = document.createElement('iframe');
+    f.src = `https://www.youtube-nocookie.com/embed/${yt.dataset.id}?autoplay=1&rel=0&playsinline=1`;
+    f.title = 'ECO WARM угсралт ба апп холболтын заавар';
+    f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    f.referrerPolicy = 'strict-origin-when-cross-origin';
+    f.allowFullscreen = true;
+    yt.replaceChildren(f);
+    f.focus();
+  });
+})();
+</script>
+</body>
+</html>
