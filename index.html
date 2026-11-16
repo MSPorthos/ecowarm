@@ -26,7 +26,9 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:var(--r-sm)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wrap{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
-section[id]{scroll-margin-top:var(--sp-4)}
+/* anchors land just below the sticky header */
+.band[id]{scroll-margin-top:calc(var(--header-h) - var(--sp-7))}
+[id]:not(.band){scroll-margin-top:calc(var(--header-h) + var(--sp-4))}
 
 /* headings: h1 > h2 (section) > card title > step title */
 h1,h2,h3{margin:0;font-family:var(--font-display);font-weight:var(--fw-semibold);letter-spacing:var(--ls-display);color:var(--text)}
@@ -71,10 +73,40 @@ h1 em{font-style:normal;color:var(--accent)}
 .media{position:relative;overflow:hidden;border-radius:var(--r-media);aspect-ratio:var(--ratio-photo);background:var(--hero-bg)}
 .media::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:var(--media-grade);mix-blend-mode:multiply}
 .media img{filter:var(--media-filter)}
-.media.is-playing::after{display:none}
+.media.is-playing::after,.media.is-live::after{display:none}   /* no grade over live video */
 
 /* ---------- header ---------- */
-.top{position:relative;z-index:2;border-bottom:1px solid var(--border)}
+.top{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--border);
+  transition:background var(--dur),box-shadow var(--dur)}
+/* once the page scrolls (or the phone menu opens) the bar gets a solid, lightly frosted fill */
+.top.is-stuck,.top.is-open{background:color-mix(in srgb,var(--bg) 94%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:var(--shadow-xs)}
+.top-actions{display:flex;align-items:center;gap:var(--sp-2)}
+.nav{flex:1;display:flex;justify-content:center}
+.nav ul{list-style:none;margin:0;padding:0;display:flex;gap:var(--sp-1)}
+.nav a{position:relative;display:flex;align-items:center;min-height:var(--h-sm);padding:0 var(--sp-3);border-radius:var(--r-sm);
+  font-size:var(--t-sm);font-weight:var(--fw-medium);color:var(--text-2);text-decoration:none;white-space:nowrap;transition:color var(--dur-fast),background var(--dur-fast)}
+.nav a[aria-current="true"]{color:var(--primary-ink);font-weight:var(--fw-semibold)}
+.nav a[aria-current="true"]::after{content:"";position:absolute;left:var(--sp-3);right:var(--sp-3);bottom:6px;height:2px;border-radius:2px;background:var(--primary)}
+.menu-btn{display:none;width:var(--h-sm);height:var(--h-sm);place-items:center;border:1px solid var(--border-strong);border-radius:var(--r-md);background:var(--surface);color:var(--text)}
+.menu-btn .bars,.menu-btn .bars::before,.menu-btn .bars::after{display:block;width:18px;height:2px;border-radius:2px;background:currentColor;transition:transform var(--dur) var(--ease),opacity var(--dur-fast)}
+.menu-btn .bars{position:relative}
+.menu-btn .bars::before,.menu-btn .bars::after{content:"";position:absolute;left:0}
+.menu-btn .bars::before{top:-6px} .menu-btn .bars::after{top:6px}
+.menu-btn[aria-expanded="true"] .bars{background:transparent}
+.menu-btn[aria-expanded="true"] .bars::before{transform:translateY(6px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] .bars::after{transform:translateY(-6px) rotate(-45deg)}
+/* below 1080px the links fold into a panel under the bar */
+@media (max-width:1079px){
+  .menu-btn{display:grid}
+  .nav{position:absolute;left:0;right:0;top:100%;display:none;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:var(--shadow-lg);
+    padding:var(--sp-2) var(--gutter) var(--sp-4);max-height:calc(100dvh - var(--header-h));overflow-y:auto}
+  .top.is-open .nav{display:block;animation:rise var(--dur) var(--ease)}
+  .nav ul{flex-direction:column;gap:0;max-width:var(--container);margin:0 auto}
+  .nav li+li{border-top:1px solid var(--border)}
+  .nav a{min-height:var(--h-md);font-size:var(--t-base);padding:0 var(--sp-2);border-radius:0}
+  .nav a[aria-current="true"]::after{left:auto;right:var(--sp-2);top:50%;bottom:auto;width:8px;height:8px;border-radius:50%;transform:translateY(-50%)}
+}
+@media (max-width:479px){.top .tel{width:var(--h-sm);padding:0}.tel-num{display:none}}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);height:calc(var(--header-h) - 1px)}
 .logo{display:inline-flex;align-items:center;min-height:var(--h-sm);gap:var(--sp-2);text-decoration:none;font:700 22px/1 var(--font-display);letter-spacing:-.045em}
 .logo .e{color:var(--primary)} .logo .w{color:var(--accent)}
@@ -351,12 +383,57 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
   .pick .sel{grid-column:1 / -1}
   .val{padding:var(--sp-3)}
 }
+/* ---------- rails: horizontal scrollers (phone carousels, review reels) ---------- */
+.rail{display:grid;grid-auto-flow:column;gap:var(--sp-3);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
+  margin:0 calc(var(--gutter) * -1);padding:2px var(--gutter) var(--sp-3);scroll-padding-inline:var(--gutter);scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.rail>*{scroll-snap-align:start}
+.rail:focus-visible{outline-offset:-2px}
+.sec-row{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--sp-4);margin-bottom:var(--sp-6)}
+.sec-row .sec-head{margin-bottom:0}
+.rail-nav{display:flex;gap:var(--sp-2);flex:none}
+.round-btn{width:var(--h-sm);height:var(--h-sm);display:grid;place-items:center;border-radius:var(--r-pill);border:1px solid var(--border-strong);
+  background:var(--surface);color:var(--text);transition:background var(--dur-fast),border-color var(--dur-fast),opacity var(--dur-fast)}
+.round-btn:disabled{opacity:.35;cursor:default}
+@media (max-width:639px){.rail-nav{display:none}}
+
+/* ---------- certificates ---------- */
+.trust{list-style:none;margin:var(--sp-2) 0 0;padding:0;display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+.trust svg{color:var(--primary)}
+.certs{grid-auto-columns:78%}
+@media (min-width:640px){.certs{grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible;margin:0;padding:0}}
+@media (min-width:1080px){.certs{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.cert{display:flex;padding:var(--sp-3)}
+.cert-link{display:flex;flex-direction:column;flex:1;color:inherit;text-decoration:none;border-radius:var(--r-media-inset)}
+.cert-img{border-radius:var(--r-media-inset);border:1px solid var(--border);background:var(--photo-bg)}
+.cert-img img{width:100%;height:100%;object-fit:cover;object-position:top}
+.cert-body{display:flex;flex-direction:column;gap:var(--sp-1);flex:1;padding:var(--sp-4) var(--sp-2) 0}
+.cert-body .pill{align-self:flex-start;margin-bottom:var(--sp-1)}
+.cert-open{margin-top:auto;display:inline-flex;align-items:center;gap:var(--sp-2);min-height:var(--h-sm);font-size:var(--t-sm);font-weight:var(--fw-semibold);color:var(--primary-ink)}
+
+/* ---------- reviews ---------- */
+.reviews{grid-auto-columns:min(72%,280px)}
+.review{display:flex;flex-direction:column;gap:var(--sp-3)}
+.review-media{aspect-ratio:var(--ratio-video);background:var(--media-bg);box-shadow:var(--shadow-sm)}
+.review-media iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.review-body{display:flex;flex-direction:column;gap:2px;padding:0 var(--sp-1)}
+.review-body .link-btn{align-self:flex-start}
+/* closing card: invites the next customer, same 9:16 frame */
+.review-invite .review-media{display:flex;flex-direction:column;justify-content:flex-end;gap:var(--sp-3);padding:var(--sp-6);box-shadow:none;
+  background:radial-gradient(80% 60% at 20% 10%,var(--glow-primary),transparent 70%),radial-gradient(70% 60% at 90% 90%,var(--glow-accent),transparent 70%),var(--surface);
+  border:1px dashed var(--border-strong)}
+.review-invite .review-media::after{display:none}
+.review-invite .q{font:700 64px/1 var(--font-display);color:var(--primary);opacity:.35}
+
 /* ---------- hover (mouse and trackpad only, so taps never leave a stuck state) ---------- */
 @media (hover:hover) and (pointer:fine){
   .btn:hover{transform:translateY(var(--lift));box-shadow:var(--shadow-xs)}
   .btn:active{transform:translateY(0) scale(.99);box-shadow:none}
-  .prod{transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease),border-color var(--dur)}
-  .prod:hover{transform:translateY(var(--lift));box-shadow:var(--shadow-md);border-color:var(--border-strong)}
+  .prod,.cert{transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease),border-color var(--dur)}
+  .nav a:hover{color:var(--text);background:var(--surface-2)}
+  .round-btn:not(:disabled):hover{border-color:var(--text-2);background:var(--surface-2)}
+  .cert:hover .cert-open{text-decoration:underline;text-underline-offset:3px}
+  .prod:hover,.cert:hover{transform:translateY(var(--lift));box-shadow:var(--shadow-md);border-color:var(--border-strong)}
   .seg button:not([aria-pressed="true"]):hover{color:var(--text)}
   .logo:hover .w{color:var(--accent-hover)}
   .video-text .meta a:hover,.link-btn.act:hover{text-decoration-thickness:2px}
@@ -385,10 +462,25 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
       </svg>
       <span><span class="e">Eco</span><span class="w">warm</span></span>
     </a>
-    <a class="btn btn-sm btn-outline" href="tel:80408238" aria-label="Утасдах: 8040 8238">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
-      8040 8238
-    </a>
+    <nav class="nav" id="nav" aria-label="Үндсэн цэс">
+      <ul>
+        <li><a href="#models">Загвар ба үнэ</a></li>
+        <li><a href="#calc">Тооцоолуур</a></li>
+        <li><a href="#video">Угсралт</a></li>
+        <li><a href="#certs">Гэрчилгээ</a></li>
+        <li><a href="#reviews">Сэтгэгдэл</a></li>
+        <li><a href="#contact">Холбоо барих</a></li>
+      </ul>
+    </nav>
+    <div class="top-actions">
+      <a class="btn btn-sm btn-outline tel" href="tel:80408238" aria-label="Утасдах: 8040 8238">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+        <span class="tel-num">8040 8238</span>
+      </a>
+      <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Цэс нээх">
+        <span class="bars" aria-hidden="true"></span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -596,8 +688,43 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
   </div>
   </section>
 
-  <!-- 6. Where to use + contact -->
-  <div class="band band-tint">
+  <!-- 6. Certificates: thumbnails are the top 4:3 of each document; the card opens the full PDF -->
+  <section class="band band-tint" id="certs" aria-labelledby="h-certs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Чанарын баталгаа</span>
+      <h2 id="h-certs" class="sec-title">Гэрчилгээ ба стандарт</h2>
+      <p class="lede">4 загвар тус бүр Монгол Улсад итгэмжлэгдсэн ABS Certification байгууллагын тохирлын гэрчилгээтэй. Цахилгаан хэрэгслийн аюулгүй байдлын GB/T 4706 стандартыг хангана.</p>
+      <ul class="trust" aria-label="Гол баталгаа">
+        <li class="pill pill-neutral"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>MNAS итгэмжлэгдсэн</li>
+        <li class="pill pill-neutral"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>GB/T 4706.1 · 4706.44</li>
+        <li class="pill pill-neutral"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>2029.09.30 хүртэл хүчинтэй</li>
+      </ul>
+    </div>
+    <div class="rail certs" id="certList"></div>
+  </div>
+  </section>
+
+  <!-- 7. Customer reviews: a horizontal rail of vertical Facebook reels; add more in REVIEWS -->
+  <section class="band" id="reviews" aria-labelledby="h-reviews">
+  <div class="wrap">
+    <div class="sec-row">
+      <div class="sec-head">
+        <span class="eyebrow">Сэтгэгдэл</span>
+        <h2 id="h-reviews" class="sec-title">Хэрэглэгчдийн сэтгэгдэл</h2>
+        <p class="lede">ECO WARM суурилуулсан айл, байгууллагуудын бодит туршлага. Бичлэг дээр дарж шууд үзээрэй.</p>
+      </div>
+      <div class="rail-nav" id="reviewNav">
+        <button class="round-btn" type="button" data-dir="-1" aria-controls="reviewList" aria-label="Өмнөх бичлэг"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="round-btn" type="button" data-dir="1" aria-controls="reviewList" aria-label="Дараагийн бичлэг"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+    <div class="rail reviews" id="reviewList" role="region" aria-label="Хэрэглэгчдийн бичлэгүүд" tabindex="0"></div>
+  </div>
+  </section>
+
+  <!-- 8. Where to use + contact -->
+  <div class="band band-tint" id="contact">
   <div class="wrap info">
     <section class="card" aria-labelledby="h-places">
       <h2 id="h-places" class="card-title">Хэрэглэх боломжтой газар</h2>
@@ -1008,6 +1135,104 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
     f.focus();
   });
 
+  /* ---------- certificates ---------- */
+  const CERTS = [
+    { no: 'ABS-PC-013', kw: 0.8, model: 'HYXR-8 · 800W',   file: 'docs/ABS-PC-013.pdf', img: 'img/cert-abs-013.webp' },
+    { no: 'ABS-PC-012', kw: 1.6, model: 'HYXR-16 · 1600W', file: 'docs/ABS-PC-012.pdf', img: 'img/cert-abs-012.webp' },
+    { no: 'ABS-PC-014', kw: 2.4, model: 'HYXR-24 · 2400W', file: 'docs/ABS-PC-014.pdf', img: 'img/cert-abs-014.webp' },
+    { no: 'ABS-PC-015', kw: 3.2, model: 'HYXR-32 · 3200W', file: 'docs/ABS-PC-015.pdf', img: 'img/cert-abs-015.webp' },
+  ];
+  const certCard = c => `
+    <article class="card cert">
+      <a class="cert-link" href="${c.href}" target="_blank" rel="noopener">
+        <span class="cert-img media"><img src="${c.img}" width="600" height="450" loading="lazy" decoding="async" alt="${c.alt}"></span>
+        <span class="cert-body">
+          <span class="pill ${c.pill}">${c.kind}</span>
+          <h3 class="step-title">${c.title}</h3>
+          <span class="sub">${c.model}</span>
+          <span class="meta">${c.sub}</span>
+          <span class="cert-open">${c.open}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+        </span>
+      </a>
+    </article>`;
+  $('certList').innerHTML = CERTS.map(c => certCard({
+    href: c.file, img: c.img, pill: 'pill-green', kind: 'Тохирлын гэрчилгээ',
+    title: `${kw(c.kw)} кВт`, model: c.model,
+    sub: `${c.no} · 2029.09.30 хүртэл`, open: 'PDF нээх',
+    alt: `${c.no} тохирлын гэрчилгээ, ECO WARM ${c.model}`,
+  })).join('') + certCard({
+    href: 'img/cert-ccc.webp', img: 'img/cert-ccc-thumb.webp', pill: 'pill-neutral', kind: 'CCC · Хятад',
+    title: 'CCC', model: 'Хятадын албан журмын гэрчилгээ', sub: 'CQC · 2030.09.27 хүртэл', open: 'Зураг нээх',
+    alt: 'Хятадын албан журмын бүтээгдэхүүний баталгаажуулалтын (CCC) гэрчилгээ, № 2025010707815459',
+  });
+
+  /* ---------- customer reviews ----------
+     Add a reel: push { url, title, meta } — the rail, arrows and reveal adapt on their own. */
+  const REVIEWS = [
+    { url: 'https://www.facebook.com/reel/1808486803599109', title: '160 м² төвийн шугамгүй хаус', meta: 'MUSHOP.mn · Facebook' },
+  ];
+  const fbEmbed = url => `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=280`;
+  $('reviewList').innerHTML = REVIEWS.map(r => `
+    <article class="review">
+      <div class="review-media media is-live">
+        <iframe src="${fbEmbed(r.url)}" loading="lazy" title="Хэрэглэгчийн сэтгэгдэл: ${esc(r.title)}"
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <div class="review-body">
+        <h3 class="step-title">${esc(r.title)}</h3>
+        <span class="meta">${esc(r.meta)}</span>
+        <a class="link-btn act" href="${r.url}" target="_blank" rel="noopener">Facebook дээр үзэх ↗</a>
+      </div>
+    </article>`).join('') + `
+    <article class="review review-invite">
+      <div class="review-media media">
+        <span class="q" aria-hidden="true">“</span>
+        <h3 class="step-title">Таны гэр дараагийнх нь байж болно</h3>
+        <p class="sub">ECO WARM-ын талаар сэтгэгдлээ бичлэгээр хуваалцвал энд байршуулна.</p>
+        <a class="btn btn-sm btn-outline" href="tel:80408238">8040 8238</a>
+      </div>
+    </article>`;
+
+  // Arrow buttons page the rail by one card; they disable at the ends and hide when nothing overflows.
+  const rail = $('reviewList'), railNav = $('reviewNav');
+  const [prevBtn, nextBtn] = railNav.querySelectorAll('button');
+  const syncRail = () => {
+    const max = rail.scrollWidth - rail.clientWidth - 2;
+    railNav.hidden = max <= 0;
+    prevBtn.disabled = rail.scrollLeft <= 2;
+    nextBtn.disabled = rail.scrollLeft >= max;
+  };
+  railNav.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const card = rail.firstElementChild;
+    const step = card ? card.getBoundingClientRect().width + parseFloat(getComputedStyle(rail).columnGap || 12) : rail.clientWidth;
+    rail.scrollBy({ left: step * +b.dataset.dir, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  });
+  rail.addEventListener('scroll', syncRail, { passive: true });
+  addEventListener('resize', syncRail);
+  syncRail();
+
+  /* ---------- header: sticky fill, phone menu, active section ---------- */
+  const top = document.querySelector('.top'), menuBtn = $('menuBtn'), nav = $('nav');
+  const setMenu = open => {
+    top.classList.toggle('is-open', open);
+    menuBtn.setAttribute('aria-expanded', open);
+    menuBtn.setAttribute('aria-label', open ? 'Цэс хаах' : 'Цэс нээх');
+  };
+  menuBtn.addEventListener('click', () => setMenu(!top.classList.contains('is-open')));
+  nav.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && top.classList.contains('is-open')) { setMenu(false); menuBtn.focus(); } });
+  document.addEventListener('click', e => { if (top.classList.contains('is-open') && !top.contains(e.target)) setMenu(false); });
+  const stick = () => top.classList.toggle('is-stuck', scrollY > 8);
+  addEventListener('scroll', stick, { passive: true }); stick();
+  const links = [...nav.querySelectorAll('a')];
+  const spy = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    links.forEach(a => a.toggleAttribute('aria-current', a.getAttribute('href') === '#' + e.target.id));
+    links.forEach(a => a.hasAttribute('aria-current') && a.setAttribute('aria-current', 'true'));
+  }), { rootMargin: '-40% 0px -55% 0px' });
+  links.forEach(a => { const t = document.querySelector(a.getAttribute('href')); if (t) spy.observe(t); });
+
   /* Scroll-in: sections fade up as they enter the viewport. Skipped for reduced motion. */
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
     const settle = el => { el.classList.remove('reveal', 'in'); el.style.removeProperty('--i'); };
@@ -1026,7 +1251,7 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
     }),{ rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
     // [selector, stagger children?]
     [['.sec-head'], ['.features'], ['#catalog > .prod', 1], ['.calc-grid > *', 1],
-     ['.yt'], ['.video-text > *', 1], ['.info > .card', 1]]
+     ['.yt'], ['.video-text > *', 1], ['#certList > .cert', 1], ['#reviewList > .review', 1], ['.info > .card', 1]]
       .forEach(([sel, stagger], g) => document.querySelectorAll(sel).forEach((el, i) => {
         el.classList.add('reveal');
         if (stagger) { el.style.setProperty('--i', i); el.dataset.rg = g; }
