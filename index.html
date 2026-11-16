@@ -770,11 +770,11 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
 <script>
 (() => {
   const MODELS = [
-    // w × d × h in mm, from the manufacturer's spec sheet (HYXR series)
-    { kw: 0.8, code: 'HYXR-800W',  area: 9,  price: 960000,  bricks: 4,  weight: 30,  w: 450,  d: 225, h: 680, img: 'img/heater-08.webp', imgW: 480, imgH: 565, isNew: true },
-    { kw: 1.6, code: 'HYXR-1600W', area: 16, price: 1235000, bricks: 8,  weight: 60,  w: 680,  d: 225, h: 680, img: 'img/heater.webp', imgW: 600, imgH: 348 },
-    { kw: 2.4, code: 'HYXR-2400W', area: 20, price: 1362000, bricks: 12, weight: 90,  w: 910,  d: 225, h: 680, img: 'img/heater.webp', imgW: 600, imgH: 348 },
-    { kw: 3.2, code: 'HYXR-3200W', area: 28, price: 1490000, bricks: 16, weight: 120, w: 1140, d: 225, h: 680, img: 'img/heater.webp', imgW: 600, imgH: 348, incoming: true },
+    // w × d × h in mm, from the manufacturer's spec sheet; codes match the ABS conformity certificates
+    { kw: 0.8, code: 'HYXR-8',     area: 9,  price: 960000,  bricks: 4,  weight: 30,  w: 450,  d: 225, h: 680, img: 'img/heater-08.webp', imgW: 480, imgH: 565, isNew: true },
+    { kw: 1.6, code: 'HYXR-16',    area: 16, price: 1235000, bricks: 8,  weight: 60,  w: 680,  d: 225, h: 680, img: 'img/heater.webp', imgW: 600, imgH: 348 },
+    { kw: 2.4, code: 'HYXR-24',    area: 20, price: 1362000, bricks: 12, weight: 90,  w: 910,  d: 225, h: 680, img: 'img/heater.webp', imgW: 600, imgH: 348 },
+    { kw: 3.2, code: 'HYXR-32',    area: 28, price: 1490000, bricks: 16, weight: 120, w: 1140, d: 225, h: 680, img: 'img/heater.webp', imgW: 600, imgH: 348, incoming: true },
   ];
   const PHONES = '8040 8238, 8901 4517';
   const STD = { hours: 8, days: 30, tariff: 184 };
