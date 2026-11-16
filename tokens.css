@@ -1,0 +1,193 @@
+/* =====================================================================
+   ECO WARM design system — tokens
+   Mood: warm · calm & premium. Warm stone neutrals, a deep forest
+   green for brand and information, an ember orange reserved for actions.
+
+   Layers
+     1. Palette   (raw scales — never used directly by components)
+     2. Semantic  (roles: bg, text, border, primary, accent, status)
+     3. Type, space, radius, shadow, motion
+   Components use only layer 2 and 3, so dark mode is just a remap.
+   ===================================================================== */
+
+:root{
+  /* ---------- 1. Palette ---------- */
+
+  /* Neutral · warm stone */
+  --stone-0:#FFFFFF;
+  --stone-50:#F8F5F0;
+  --stone-100:#F1ECE4;
+  --stone-200:#E9E2D8;
+  --stone-300:#D6CCBF;
+  --stone-400:#A39A90;
+  --stone-500:#6E655D;
+  --stone-600:#5A524B;
+  --stone-700:#4A423B;
+  --stone-750:#423C36;
+  --stone-800:#2E2A26;
+  --stone-850:#1E1B18;
+  --stone-900:#1B1714;
+  --stone-950:#151311;
+
+  /* Primary · forest green (brand, information, success) */
+  --forest-100:#E6F3E8;
+  --forest-300:#7FD08F;
+  --forest-400:#5DBE70;
+  --forest-600:#23843A;
+  --forest-700:#1D6E30;
+  --forest-800:#1F5A2B;
+  --forest-950:#1B2E20;
+
+  /* Accent · ember orange (actions only) */
+  --ember-100:#FBE7DA;
+  --ember-400:#F07A3D;
+  --ember-500:#E8692A;
+  --ember-600:#C2490A;   /* 4.9:1 on white — passes AA for button text */
+  --ember-700:#A33D08;
+  --ember-950:#1A0E09;
+
+  /* Status */
+  --clay-100:#F8E3DD;  --clay-300:#F08A72;  --clay-700:#A8321E;  --clay-950:#3A201A;
+  --ochre-100:#FBEFD2; --ochre-300:#E8B85A; --ochre-800:#7A5200; --ochre-950:#33281A;
+
+  /* ---------- 2. Semantic roles (light) ---------- */
+  --bg:var(--stone-50);
+  --surface:var(--stone-0);
+  --surface-2:var(--stone-50);
+  --text:var(--stone-900);
+  --text-2:var(--stone-700);
+  --text-muted:var(--stone-500);
+  --border:var(--stone-200);
+  --border-strong:var(--stone-300);
+
+  --primary:var(--forest-600);
+  --primary-ink:var(--forest-700);      /* green text on light surfaces */
+  --primary-soft:var(--forest-100);     /* tinted backgrounds */
+  --primary-panel:var(--forest-600);    /* solid green panels (contact card) */
+  --on-primary:var(--stone-0);
+
+  --accent:var(--ember-600);
+  --accent-hover:var(--ember-700);
+  --accent-soft:var(--ember-100);
+  --on-accent:var(--stone-0);
+
+  --success:var(--forest-700);  --success-soft:var(--forest-100);
+  --danger:var(--clay-700);     --danger-soft:var(--clay-100);
+  --warning:var(--ochre-800);   --warning-soft:var(--ochre-100);
+
+  /* Product photos are shot on white, so their frame stays white in both themes */
+  --photo-bg:var(--stone-0);
+  --photo-ink:var(--stone-700);
+  --media-bg:#000;
+  --hero-bg:#EFE6DA;
+
+  /* Imagery · one family: same ratio, same radius, same brand grade.
+     The grade is a multiply layer: a 40% warm-stone wash (white → cream)
+     plus a faint forest glow top-left and ember glow bottom-right. */
+  --ratio-photo:4 / 3;
+  --ratio-video:9 / 16;        /* the guide clip is shot vertically */
+  --r-media:var(--r-lg);
+  --r-media-inset:calc(var(--r-media) - var(--sp-3));  /* concentric inside a 12px-padded card */
+  --media-filter:saturate(.95) contrast(1.02);
+  --media-grade:
+    linear-gradient(160deg, color-mix(in srgb, var(--forest-600) 9%, transparent), transparent 45%),
+    linear-gradient(340deg, color-mix(in srgb, var(--ember-500) 11%, transparent), transparent 50%),
+    linear-gradient(color-mix(in srgb, var(--stone-100) 40%, transparent), color-mix(in srgb, var(--stone-100) 40%, transparent));
+
+  /* Backgrounds · sections alternate plain / tinted; the hero gets brand glow + grid + grain */
+  --band-plain:var(--bg);
+  --band-tint:var(--stone-100);
+  /* Opacities are capped so the worst pixel (glow centre + grid line + grain) still gives
+     4.5:1 for 14px green eyebrow text — WCAG AA. Raise them and re-check contrast. */
+  --glow-primary:color-mix(in srgb, var(--forest-600) 9%, transparent);
+  --glow-accent:color-mix(in srgb, var(--ember-500) 12%, transparent);
+  --grid-line:color-mix(in srgb, var(--stone-900) 4%, transparent);
+  --grid-size:48px;
+  --grain-opacity:.04;
+  --grain-invert:0;
+  --texture-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* ---------- 3a. Typography ---------- */
+  /* Pairing: Unbounded (display — wide geometric, echoes the poster wordmark)
+              Golos Text (body — built for Cyrillic, calm and very legible) */
+  --font-display:"Unbounded", system-ui, sans-serif;
+  --font-body:"Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --t-xs:13px; --t-sm:14px; --t-base:16px; --t-md:18px; --t-lg:22px; --t-xl:28px;
+  --t-h2:clamp(26px,5.6vw,36px); --t-h1:clamp(32px,8.6vw,50px); --t-num:clamp(34px,8vw,44px);
+
+  --lh-tight:1.1; --lh-snug:1.25; --lh-body:1.55;
+  --fw-regular:400; --fw-medium:500; --fw-semibold:600; --fw-bold:700;
+  --ls-display:-.02em; --ls-tight:-.03em;
+
+  /* ---------- 3b. Spacing · 4px base ---------- */
+  --sp-1:4px;   --sp-2:8px;   --sp-3:12px;  --sp-4:16px;
+  --sp-5:20px;  --sp-6:24px;  --sp-7:32px;  --sp-8:40px;
+  --sp-9:48px;  --sp-10:56px; --sp-11:64px; --sp-12:80px; --sp-13:96px;
+  --gutter:var(--sp-4);
+  --section:var(--sp-11);     /* vertical rhythm between page sections */
+  --container:1180px;
+  --header-h:65px;            /* 64px bar + 1px border */
+
+  /* Control heights — every tap target is at least --h-sm */
+  --h-sm:44px; --h-md:48px; --h-lg:56px;
+  --card-pad:var(--sp-6);     /* inner padding of every card; --sp-5 on phones */
+
+  /* ---------- 3c. Radius ---------- */
+  --r-sm:8px; --r-md:12px; --r-lg:20px; --r-pill:999px;
+
+  /* ---------- 3d. Shadows · soft, warm-tinted ---------- */
+  --shadow-xs:0 1px 2px rgba(27,23,20,.08);
+  --shadow-sm:0 1px 0 rgba(27,23,20,.04), 0 10px 28px -14px rgba(27,23,20,.18);
+  --shadow-md:0 1px 0 rgba(27,23,20,.04), 0 16px 36px -16px rgba(27,23,20,.26);   /* card hover */
+  --shadow-lg:0 18px 40px -16px rgba(27,23,20,.40);
+  --ring:0 0 0 3px var(--primary-soft);
+  --ring-danger:0 0 0 3px var(--danger-soft);
+
+  /* ---------- 3e. Motion ---------- */
+  --dur-fast:.15s; --dur:.25s; --dur-slow:.4s; --dur-reveal:.6s;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --lift:-2px;                 /* hover rise for buttons and product cards */
+  --reveal-shift:16px;         /* scroll-in travel */
+  --reveal-stagger:70ms;
+}
+
+/* ---------- Dark theme: remap roles only ---------- */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:var(--stone-950);
+    --surface:var(--stone-850);
+    --surface-2:var(--stone-900);
+    --text:var(--stone-100);
+    --text-2:var(--stone-300);
+    --text-muted:var(--stone-400);
+    --border:var(--stone-800);
+    --border-strong:var(--stone-750);
+
+    --primary:var(--forest-400);
+    --primary-ink:var(--forest-300);
+    --primary-soft:var(--forest-950);
+    --primary-panel:var(--forest-800);
+
+    --accent:var(--ember-500);
+    --accent-hover:var(--ember-400);
+    --accent-soft:var(--ember-950);
+    --on-accent:var(--ember-950);
+
+    --success:var(--forest-300);  --success-soft:var(--forest-950);
+    --danger:var(--clay-300);     --danger-soft:var(--clay-950);
+    --warning:var(--ochre-300);   --warning-soft:var(--ochre-950);
+
+    --band-tint:var(--stone-900);
+    --glow-primary:color-mix(in srgb, var(--forest-400) 12%, transparent);
+    --glow-accent:color-mix(in srgb, var(--ember-500) 10%, transparent);
+    --grid-line:color-mix(in srgb, var(--stone-0) 5%, transparent);
+    --grain-opacity:.09;
+    --grain-invert:1;
+
+    --shadow-xs:0 1px 2px rgba(0,0,0,.4);
+    --shadow-sm:0 1px 0 rgba(0,0,0,.3), 0 12px 30px -14px rgba(0,0,0,.6);
+    --shadow-md:0 1px 0 rgba(0,0,0,.3), 0 16px 36px -14px rgba(0,0,0,.7);
+    --shadow-lg:0 18px 40px -16px rgba(0,0,0,.7);
+  }
+}
