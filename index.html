@@ -159,38 +159,45 @@ h1 em{font-style:normal;color:var(--accent)}
 /* ---------- section header ---------- */
 .sec-head{display:flex;flex-direction:column;gap:var(--sp-3);margin-bottom:var(--sp-6);max-width:720px}
 
-/* ---------- video guide ---------- */
-/* The clip is shot vertically (9:16), so the frame is portrait too: no black side bars. */
-.video{display:grid;gap:var(--sp-6);align-items:center}
-@media (min-width:760px){.video{grid-template-columns:300px minmax(0,1fr);gap:var(--sp-9)}}
-@media (min-width:960px){.video{grid-template-columns:320px minmax(0,560px);gap:var(--sp-11);justify-content:center}}
-.yt{position:relative;display:block;width:min(100%,340px);margin:0 auto;aspect-ratio:var(--ratio-video);background:var(--media-bg);box-shadow:var(--shadow-sm)}
-/* Phone: heading → video → steps, so the clip sits right under its title. */
-@media (max-width:759px){
-  .video{gap:0}
-  .video-text{display:contents}
-  .video .eyebrow,.video .sec-title,.video .lede{order:1}
-  .video .lede{margin-bottom:var(--sp-5)}
-  .video .yt{order:2;width:min(100%,300px)}
-  .video-steps,.video-text .meta{order:3}
-}
-.yt button{all:unset;position:absolute;inset:0;cursor:pointer;display:grid;place-items:center}
-.yt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform var(--dur-slow) ease,filter .3s}
-.yt button::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.55))}
-.yt .play{position:relative;z-index:1;width:76px;height:76px;border-radius:var(--r-pill);display:grid;place-items:center;background:var(--accent);color:var(--on-accent);
+/* ---------- video guides ----------
+   Every guide is a 9:16 cover in a rail (all four clips are filmed upright).
+   A click opens the player in a native <dialog> sized to the upload's real
+   shape: 9:16 for Shorts, 16:9 for regular uploads — never a tiny letterbox. */
+.guides{grid-auto-columns:min(64%,240px)}
+@media (min-width:1080px){.guides{grid-auto-flow:row;grid-template-columns:repeat(4,minmax(0,1fr));overflow:visible;margin:0;padding:0}}
+.vguide{display:flex;flex-direction:column;gap:var(--sp-3)}
+.yt{position:relative;display:block;aspect-ratio:var(--ratio-video);background:var(--media-bg);box-shadow:var(--shadow-sm)}
+.yt button{all:unset;position:absolute;inset:0;cursor:pointer;display:grid;place-items:center;border-radius:inherit}
+.yt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform var(--dur-slow) ease}
+.yt button::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.55))}
+.yt .play{position:relative;z-index:1;width:64px;height:64px;border-radius:var(--r-pill);display:grid;place-items:center;background:var(--accent);color:var(--on-accent);
   box-shadow:var(--shadow-lg);transition:transform var(--dur) ease,background var(--dur)}
 .yt .cap{position:absolute;z-index:1;left:var(--sp-4);right:var(--sp-4);bottom:var(--sp-4);color:#fff;font-size:var(--t-sm);font-weight:var(--fw-semibold);display:flex;align-items:center;gap:var(--sp-2);text-shadow:0 1px 2px rgba(0,0,0,.4)}
-.yt button:hover img{transform:scale(1.03)}
-.yt button:hover .play{transform:scale(1.06);background:var(--accent-hover)}
-.yt button:focus-visible{outline:3px solid var(--accent);outline-offset:-3px;border-radius:var(--r-lg)}
-.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.video-text .sec-title{margin-bottom:var(--sp-3)}
-.video-steps{list-style:none;margin:var(--sp-5) 0 0;padding:0;display:grid;gap:var(--sp-3)}
-.video-steps li{display:flex;gap:var(--sp-3);align-items:flex-start;color:var(--text-2)}
-.video-steps .n{flex:none;width:28px;height:28px;border-radius:var(--r-sm);display:grid;place-items:center;background:var(--primary-soft);color:var(--primary-ink);font:700 var(--t-xs) var(--font-display)}
-.video-text .meta{margin-top:var(--sp-5)}
-.video-text .meta a{color:var(--primary-ink);font-weight:var(--fw-semibold)}
-@media (prefers-reduced-motion:reduce){.yt img,.yt .play{transition:none}}
+.yt .n{position:absolute;z-index:1;top:var(--sp-3);left:var(--sp-3);min-width:32px;height:32px;padding:0 var(--sp-2);border-radius:var(--r-pill);display:grid;place-items:center;
+  background:var(--surface);color:var(--primary-ink);font:700 var(--t-xs) var(--font-display);box-shadow:var(--shadow-xs)}
+.yt button:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+.vguide-body{display:flex;flex-direction:column;gap:2px;padding:0 var(--sp-1)}
+.vguide-body .step-title{font-size:var(--t-base);line-height:var(--lh-snug)}
+
+/* player dialog */
+.player{padding:0;border:0;background:transparent;color:#fff;max-width:none;max-height:none;overflow:visible}
+.player::backdrop{background:rgba(12,10,9,.82)}
+.player-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);margin-bottom:var(--sp-2)}
+.player-bar h2{font:600 var(--t-sm)/var(--lh-snug) var(--font-body);color:#fff;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.player-bar .round-btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.28);color:#fff;flex:none}
+.player-frame{position:relative;aspect-ratio:16 / 9;width:min(92vw,960px,calc((88dvh - 60px) * 16 / 9));border-radius:var(--r-md);overflow:hidden;background:#000;box-shadow:var(--shadow-lg)}
+.player.tall .player-frame{aspect-ratio:var(--ratio-video);width:min(92vw,420px,calc((88dvh - 60px) * 9 / 16))}
+.player-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.player[open]{animation:rise var(--dur) var(--ease)}
+
+/* thermostat app download */
+.app{display:grid;gap:var(--sp-5);align-items:center;margin-top:var(--sp-7);padding:var(--card-pad)}
+@media (min-width:760px){.app{grid-template-columns:auto minmax(0,1fr) auto;gap:var(--sp-6)}}
+.app-icon{width:56px;height:56px;border-radius:var(--r-md);display:grid;place-items:center;background:var(--primary-soft);color:var(--primary)}
+.app-text{display:flex;flex-direction:column;gap:var(--sp-1)}
+.app-text .meta a{color:var(--primary-ink);font-weight:var(--fw-semibold)}
+.app .btn{white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.yt img,.yt .play{transition:none}.player[open]{animation:none}}
 
 /* ---------- products ---------- */
 .products{display:grid;grid-auto-flow:column;grid-auto-columns:78%;gap:var(--sp-3);overflow-x:auto;scroll-snap-type:x mandatory;
@@ -355,6 +362,20 @@ label.f,.col-label{display:block;font-size:var(--t-xs);font-weight:var(--fw-medi
   color:var(--on-primary);text-decoration:none;font:600 var(--t-lg)/1 var(--font-display);letter-spacing:.01em}
 .phones a:hover{background:rgba(255,255,255,.22)}
 
+/* ---------- location ---------- */
+.loc{display:grid;gap:var(--sp-4)}
+@media (min-width:960px){.loc{grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);align-items:stretch}}
+.loc .card{padding:var(--card-pad);display:flex;flex-direction:column;gap:var(--sp-4)}
+.addr{list-style:none;margin:0;padding:0;display:grid;gap:var(--sp-3)}
+.addr li{display:flex;gap:var(--sp-3);align-items:flex-start;color:var(--text-2)}
+.addr svg{flex:none;color:var(--primary);margin-top:2px}
+.addr b{display:block;color:var(--text);font-weight:var(--fw-semibold)}
+.loc-actions{display:flex;flex-wrap:wrap;gap:var(--sp-3);margin-top:auto}
+.loc-actions .btn{flex:1 1 auto}
+.map{aspect-ratio:var(--ratio-photo);background:var(--surface-2);border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+@media (min-width:960px){.map{aspect-ratio:auto;min-height:380px}}
+.map iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
 footer{padding:var(--sp-6) 0 var(--sp-7)}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--sp-2) var(--sp-6)}
 footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);letter-spacing:-.01em}
@@ -436,7 +457,10 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
   .prod:hover,.cert:hover{transform:translateY(var(--lift));box-shadow:var(--shadow-md);border-color:var(--border-strong)}
   .seg button:not([aria-pressed="true"]):hover{color:var(--text)}
   .logo:hover .w{color:var(--accent-hover)}
-  .video-text .meta a:hover,.link-btn.act:hover{text-decoration-thickness:2px}
+  .app-text .meta a:hover,.link-btn.act:hover{text-decoration-thickness:2px}
+  .yt button:hover img{transform:scale(1.03)}
+  .yt button:hover .play{transform:scale(1.06);background:var(--accent-hover)}
+  .player-bar .round-btn:hover{background:rgba(255,255,255,.22)}
 }
 
 /* ---------- scroll-in ----------
@@ -466,10 +490,11 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
       <ul>
         <li><a href="#models">Загвар ба үнэ</a></li>
         <li><a href="#calc">Тооцоолуур</a></li>
-        <li><a href="#video">Угсралт</a></li>
+        <li><a href="#video">Заавар</a></li>
         <li><a href="#certs">Гэрчилгээ</a></li>
         <li><a href="#reviews">Сэтгэгдэл</a></li>
         <li><a href="#contact">Холбоо барих</a></li>
+        <li><a href="#location">Байршил</a></li>
       </ul>
     </nav>
     <div class="top-actions">
@@ -664,26 +689,33 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
   </div>
   </section>
 
-  <!-- 5. Video guide: thumbnail first, the YouTube player loads only on click -->
+  <!-- 5. Video guides: a rail of 9:16 covers; the player opens in a dialog only on click. Add more in GUIDES -->
   <section class="band" id="video" aria-labelledby="h-video">
-  <div class="wrap video">
-    <div class="yt media" id="yt" data-id="FLGh-Tyijrc">
-      <button type="button" aria-label="Угсралт ба апп холболтын заавар бичлэгийг тоглуулах">
-        <img src="https://i.ytimg.com/vi_webp/FLGh-Tyijrc/maxresdefault.webp" alt="" width="1280" height="720" loading="lazy" decoding="async"
-             onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/FLGh-Tyijrc/hqdefault.jpg'">
-        <span class="play" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
-        <span class="cap" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M10 9l5 3-5 3z" fill="currentColor"/></svg>Дарж үзэх</span>
-      </button>
+  <div class="wrap">
+    <div class="sec-row">
+      <div class="sec-head">
+        <span class="eyebrow">Видео заавар</span>
+        <h2 id="h-video" class="sec-title">Угсралт ба тохиргооны заавар</h2>
+        <p class="lede">Угсрахаас эхлээд Wi-Fi холболт, цагийн тохиргоо, термостатын дохио хүртэл богино бичлэгээр алхам алхмаар үзээрэй.</p>
+      </div>
+      <div class="rail-nav" id="guideNav">
+        <button class="round-btn" type="button" data-dir="-1" aria-controls="guideList" aria-label="Өмнөх заавар"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="round-btn" type="button" data-dir="1" aria-controls="guideList" aria-label="Дараагийн заавар"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
     </div>
-    <div class="video-text">
-      <span class="eyebrow">Видео заавар</span>
-      <h2 id="h-video" class="sec-title">Угсралт ба апп холболт</h2>
-      <p class="lede">Халаагуураа хэрхэн угсарч, утасныхаа аппад холбохыг бичлэгээс алхам алхмаар үзээрэй.</p>
-      <ol class="video-steps">
-        <li><span class="n">1</span><span>Магни тоосгыг байрлуулж, халаагуураа угсрах</span></li>
-        <li><span class="n">2</span><span>Wi-Fi аппад холбож, утаснаасаа удирдах</span></li>
-      </ol>
-      <p class="meta">Тусламж хэрэгтэй бол <a href="tel:80408238">8040 8238</a> руу залгаарай.</p>
+    <div class="rail guides" id="guideList" role="region" aria-label="Видео заавар" tabindex="0"></div>
+
+    <div class="card app">
+      <span class="app-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3M10 18h4"/></svg></span>
+      <div class="app-text">
+        <h3 class="card-title">Термостатын апп татах</h3>
+        <p class="sub">Халаагуураа утаснаасаа асааж унтраах, температур, цагийн хуваарь тохируулах «优e家» апп. Суулгасны дараа 2-р бичлэгийн дагуу Wi-Fi-д холбоорой.</p>
+        <p class="meta">Android утсанд зориулсан APK файл · Тусламж: <a href="tel:80408238">8040 8238</a></p>
+      </div>
+      <a class="btn btn-action" href="https://drive.google.com/file/d/1hRFNeophIes-q3zDbR2c-YpY7ajrSsWm/view" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+        Апп татах
+      </a>
     </div>
   </div>
   </section>
@@ -748,6 +780,37 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
     </section>
   </div>
   </div>
+  <!-- 9. Location: lazy Google Maps embed (no API key) + links that open the app / directions -->
+  <section class="band" id="location" aria-labelledby="h-location">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Байршил</span>
+      <h2 id="h-location" class="sec-title">Манай байршил</h2>
+      <p class="lede">Халаагуурыг биеэр үзэж, зөвлөгөө авахыг хүсвэл урьдчилан залгаад ирээрэй.</p>
+    </div>
+    <div class="loc">
+      <div class="card">
+        <ul class="addr">
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.1-7-11.5a7 7 0 0 1 14 0C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            <span><b>Улаанбаатар, Баянзүрх дүүрэг, 13-р хороо</b>Urin Solar Energy ХХК-ийн ойролцоо</span></li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+            <span><b>Ирэхээсээ өмнө залгаарай</b><a class="link-btn act" href="tel:80408238">8040 8238</a> · <a class="link-btn act" href="tel:89014517">8901 4517</a></span></li>
+        </ul>
+        <div class="loc-actions">
+          <a class="btn btn-action" href="https://www.google.com/maps/dir/?api=1&amp;destination=47.9199232,106.8826624" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8z"/></svg>
+            Чиглэл авах
+          </a>
+          <a class="btn btn-outline" href="https://maps.app.goo.gl/nVs17VbaKJ3c1w239" target="_blank" rel="noopener">Google Maps-аар нээх ↗</a>
+        </div>
+      </div>
+      <div class="map media is-live">
+        <iframe src="https://maps.google.com/maps?q=47.9199232,106.8826624&amp;z=16&amp;hl=mn&amp;output=embed" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade" title="ECO WARM-ын байршил Google газрын зураг дээр"></iframe>
+      </div>
+    </div>
+  </div>
+  </section>
 </main>
 
 <footer>
@@ -756,6 +819,14 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
     <span class="meta">© ECO WARM · Тоосгон халаагуур</span>
   </div>
 </footer>
+
+<dialog class="player" id="player" aria-labelledby="playerTitle">
+  <div class="player-bar">
+    <h2 id="playerTitle"></h2>
+    <button class="round-btn" type="button" id="playerClose" aria-label="Бичлэг хаах"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="player-frame" id="playerFrame"></div>
+</dialog>
 
 <div class="dock" id="dock" aria-hidden="true">
   <div class="d-l">
@@ -1121,18 +1192,57 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
   renderRooms(); syncMode(); update();
   if (fromLink && last.rooms.some(r => r.area)) showResults(false);
 
-  /* Video facade: swap the thumbnail for the real player on the first click. */
-  const yt = $('yt');
-  yt.querySelector('button').addEventListener('click', () => {
+  /* ---------- video guides ----------
+     Add a guide: push { id, title, short } — `short: true` for a YouTube Short (9:16 player),
+     false for a regular upload (16:9 player). Covers are YouTube's own WebP, cropped to 9:16. */
+  const GUIDES = [
+    { id: 'FLGh-Tyijrc', short: false, title: 'Халаагуурын угсралт ба апп холболт', meta: 'Угсралт · Апп' },
+    { id: 'Njp6aHPc9dQ', short: false, title: 'Wi-Fi холболт ба цагийн тохиргоо',   meta: 'Wi-Fi · Цагийн хуваарь' },
+    { id: 'hkPNbEhdFEM', short: true,  title: 'Термостатыг дахин тохируулах',        meta: 'Shorts · Термостат' },
+    { id: 'fstjwemASVw', short: true,  title: 'Түгжээ буюу «oF» тэмдэглэгээ',         meta: 'Shorts · Дэлгэцийн тэмдэг' },
+  ];
+  const ytCover = g => g.short ? `https://i.ytimg.com/vi_webp/${g.id}/oar2.webp` : `https://i.ytimg.com/vi_webp/${g.id}/maxresdefault.webp`;
+  const ytFallback = g => `https://i.ytimg.com/vi/${g.id}/hqdefault.jpg`;
+  $('guideList').innerHTML = GUIDES.map((g, i) => `
+    <article class="vguide">
+      <div class="yt media">
+        <button type="button" data-i="${i}" aria-label="${i + 1}-р заавар тоглуулах: ${esc(g.title)}">
+          <img src="${ytCover(g)}" alt="" width="${g.short ? 1080 : 1280}" height="${g.short ? 1920 : 720}" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='${ytFallback(g)}'">
+          <span class="n" aria-hidden="true">${i + 1}</span>
+          <span class="play" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+          <span class="cap" aria-hidden="true">Дарж үзэх</span>
+        </button>
+      </div>
+      <div class="vguide-body">
+        <h3 class="step-title">${esc(g.title)}</h3>
+        <span class="meta">${esc(g.meta)}</span>
+      </div>
+    </article>`).join('');
+
+  /* Player: a native modal <dialog> (focus trap, Esc, inert page for free). The iframe is created
+     on open and removed on close, so nothing loads before a click and playback stops on close. */
+  const player = $('player'), playerFrame = $('playerFrame');
+  let playerFrom = null;
+  const openPlayer = (g, from) => {
+    playerFrom = from;
+    $('playerTitle').textContent = g.title;
+    player.classList.toggle('tall', g.short);
     const f = document.createElement('iframe');
-    f.src = `https://www.youtube-nocookie.com/embed/${yt.dataset.id}?autoplay=1&rel=0&playsinline=1`;
-    f.title = 'ECO WARM угсралт ба апп холболтын заавар';
+    f.src = `https://www.youtube-nocookie.com/embed/${g.id}?autoplay=1&rel=0&playsinline=1`;
+    f.title = `ECO WARM заавар: ${g.title}`;
     f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
     f.referrerPolicy = 'strict-origin-when-cross-origin';
     f.allowFullscreen = true;
-    yt.replaceChildren(f);
-    yt.classList.add('is-playing');  // no colour grade over the live player
-    f.focus();
+    playerFrame.replaceChildren(f);
+    player.showModal();
+    $('playerClose').focus();
+  };
+  player.addEventListener('close', () => { playerFrame.replaceChildren(); playerFrom?.focus(); });
+  $('playerClose').addEventListener('click', () => player.close());
+  player.addEventListener('click', e => { if (e.target === player) player.close(); });   // backdrop
+  $('guideList').addEventListener('click', e => {
+    const b = e.target.closest('button[data-i]'); if (b) openPlayer(GUIDES[+b.dataset.i], b);
   });
 
   /* ---------- certificates ---------- */
@@ -1170,6 +1280,7 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
      Add a reel: push { url, title, meta } — the rail, arrows and reveal adapt on their own. */
   const REVIEWS = [
     { url: 'https://www.facebook.com/reel/1808486803599109', title: '160 м² төвийн шугамгүй хаус', meta: 'MUSHOP.mn · Facebook' },
+    { url: 'https://www.facebook.com/reel/1507695378230926', title: 'Сарын цахилгаан 330 мянгаас 130–140 мянга болсон', meta: 'DemDemendee.mn · Facebook' },
   ];
   const fbEmbed = url => `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&width=280`;
   $('reviewList').innerHTML = REVIEWS.map(r => `
@@ -1193,24 +1304,27 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
       </div>
     </article>`;
 
-  // Arrow buttons page the rail by one card; they disable at the ends and hide when nothing overflows.
-  const rail = $('reviewList'), railNav = $('reviewNav');
-  const [prevBtn, nextBtn] = railNav.querySelectorAll('button');
-  const syncRail = () => {
-    const max = rail.scrollWidth - rail.clientWidth - 2;
-    railNav.hidden = max <= 0;
-    prevBtn.disabled = rail.scrollLeft <= 2;
-    nextBtn.disabled = rail.scrollLeft >= max;
+  // Arrow buttons page a rail by one card; they disable at the ends and hide when nothing overflows.
+  const initRail = (rail, railNav) => {
+    const [prevBtn, nextBtn] = railNav.querySelectorAll('button');
+    const sync = () => {
+      const max = rail.scrollWidth - rail.clientWidth - 2;
+      railNav.hidden = max <= 0;
+      prevBtn.disabled = rail.scrollLeft <= 2;
+      nextBtn.disabled = rail.scrollLeft >= max;
+    };
+    railNav.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      const card = rail.firstElementChild;
+      const step = card ? card.getBoundingClientRect().width + parseFloat(getComputedStyle(rail).columnGap || 12) : rail.clientWidth;
+      rail.scrollBy({ left: step * +b.dataset.dir, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+    rail.addEventListener('scroll', sync, { passive: true });
+    addEventListener('resize', sync);
+    sync();
   };
-  railNav.addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    const card = rail.firstElementChild;
-    const step = card ? card.getBoundingClientRect().width + parseFloat(getComputedStyle(rail).columnGap || 12) : rail.clientWidth;
-    rail.scrollBy({ left: step * +b.dataset.dir, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-  });
-  rail.addEventListener('scroll', syncRail, { passive: true });
-  addEventListener('resize', syncRail);
-  syncRail();
+  initRail($('guideList'), $('guideNav'));
+  initRail($('reviewList'), $('reviewNav'));
 
   /* ---------- header: sticky fill, phone menu, active section ---------- */
   const top = document.querySelector('.top'), menuBtn = $('menuBtn'), nav = $('nav');
@@ -1251,7 +1365,7 @@ footer b{font:600 var(--t-sm) var(--font-display);color:var(--primary-ink);lette
     }),{ rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
     // [selector, stagger children?]
     [['.sec-head'], ['.features'], ['#catalog > .prod', 1], ['.calc-grid > *', 1],
-     ['.yt'], ['.video-text > *', 1], ['#certList > .cert', 1], ['#reviewList > .review', 1], ['.info > .card', 1]]
+     ['#guideList > .vguide', 1], ['.app'], ['#certList > .cert', 1], ['#reviewList > .review', 1], ['.info > .card', 1], ['.loc > *', 1]]
       .forEach(([sel, stagger], g) => document.querySelectorAll(sel).forEach((el, i) => {
         el.classList.add('reveal');
         if (stagger) { el.style.setProperty('--i', i); el.dataset.rg = g; }

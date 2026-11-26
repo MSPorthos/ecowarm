@@ -51,7 +51,7 @@ All shadows are warm-tinted, and each is remapped in dark mode.
 
 Every photo sits in a `.media` frame, so all images share one ratio, one radius and one colour grade.
 
-- **Ratio.** `--ratio-photo` is 4:3 for the hero, the product frames and the result thumbs. The only exception is `--ratio-video` (9:16), because the guide clip is shot vertically.
+- **Ratio.** `--ratio-photo` is 4:3 for the hero, the product frames, the certificates and the map. The only exception is `--ratio-video` (9:16), used for the guide covers and review reels, because every clip is filmed upright.
 - **Radius.** Standalone media use `--r-media` (20px). Product frames sit inside a card with 12px padding, so they use the concentric `--r-media-inset` (8px).
 - **Grade.** `--media-grade` is a multiply layer: a 40% warm-stone wash, a forest glow at the top left and an ember glow at the bottom right. `--media-filter` adds a light saturate and contrast tweak. The grade is switched off (`.is-playing`) once the video player loads.
 - **Files.** All local images are WebP and are made from the original sources by `make_webp.py`.
@@ -62,7 +62,8 @@ Every photo sits in a `.media` frame, so all images share one ratio, one radius 
   | `heater.webp` | 600 px wide | product photo |
   | `heater-08.webp` | 480 px wide | 0.8 kW product photo |
 
-  The YouTube cover loads YouTube's own WebP and falls back to JPEG.
+  Guide covers load YouTube's own WebP (`oar2` for Shorts, `maxresdefault` cropped to 9:16 for regular uploads) and fall back to JPEG.
+- **Video player.** A cover click opens a native `<dialog>` whose frame matches the upload: 9:16 for Shorts, 16:9 for regular uploads. The iframe is created on open and removed on close, so nothing loads early and playback stops. Focus returns to the cover.
 - **Loading.** The hero is eager with `fetchpriority="high"`. Every image below the fold uses `loading="lazy"` and `decoding="async"`, and has a `width`/`height` set to prevent layout shift.
 - **Alt text.**
   - Content images describe the subject. Product images give the model code, power and dimensions.
@@ -77,8 +78,11 @@ Sections are full-width `.band` elements, and each one holds a `.wrap`. Their ba
 | 1 | Hero + features | `.band-hero` | `--band-plain` with two brand glows, a fading grid and grain |
 | 2 | Models | `.band` | `--band-plain` |
 | 3 | Calculator | `.band-tint` | `--band-tint` with hairlines top and bottom |
-| 4 | Video | `.band` | `--band-plain` |
-| 5 | Places + contact | `.band-tint` | `--band-tint` |
+| 4 | Video guides + app | `.band` | `--band-plain` |
+| 5 | Certificates | `.band-tint` | `--band-tint` |
+| 6 | Reviews | `.band` | `--band-plain` |
+| 7 | Places + contact | `.band-tint` | `--band-tint` |
+| 8 | Location | `.band` | `--band-plain` |
 
 The hero layers, from back to front:
 
@@ -109,7 +113,7 @@ These opacities are capped so the worst pixel keeps 14px green text at ≥ 4.5:1
   - Buttons and product cards lift by `--lift` (2px). Buttons get `--shadow-xs` and product cards get `--shadow-md`.
   - Hover is only used on interactive elements, plus the product cards.
 - **Scroll-in.**
-  - JS adds `.reveal` to the section heads, the features grid, product cards, calculator columns, the video and the info cards. They fade up `--reveal-shift` (16px) as they enter the viewport.
+  - JS adds `.reveal` to the section heads, the features grid, product cards, calculator columns, guide covers, the app card, certificates, reviews, the info cards and the location block. They fade up `--reveal-shift` (16px) as they enter the viewport.
   - Groups stagger by `--reveal-stagger` (70ms). A group arrives together as soon as any member is seen, so cards in the phone carousel are never left hidden.
   - `.reveal` is never in the HTML, so the content still shows without JS. The class is removed after the element arrives, which hands transitions back to the hover rules.
 - **Reduced motion.** Under `prefers-reduced-motion` the script adds no reveals at all, and all animations and transitions are switched off.
